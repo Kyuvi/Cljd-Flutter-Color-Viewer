@@ -1,0 +1,172 @@
+
+(ns btn-grid
+ (:require
+   ["package:flutter/material.dart" :as m]
+   ;; ["package:flutter/services.dart" :as sv]
+   ;; ["dart:math" :as math]
+   ;; ["dart:async" :as async]
+   [cljd.flutter :as f])
+ (:require
+  ;; [dlg-btns :as btn]
+  [kjf.colors :as cl]
+  [kjf.dbg :as db :refer [dprn]]
+  )
+ )
+(defn material-page [child]
+  (m/MaterialPage .child (m/Container .child child)))
+
+(defn make-color-map
+  ( [color-vec]
+   (zipmap color-vec
+           (mapv (fn [kii] (cl/color kii)) color-vec)))
+  ([kii accent-prep]
+   (let [shade-vec (into [50] (range 100 1000 100))
+         acc-vec (vec (range 100 500 100))
+         shade-map {:shades (zipmap
+                          shade-vec (mapv (fn [k] (cl/color kii k)) shade-vec))}
+         accent-map (when accent-prep
+                   {:accents (zipmap
+                              acc-vec (mapv (fn [k] (cl/color kii :ac k))
+                                            acc-vec))} )]
+     {kii (merge shade-map accent-map)}
+
+     )
+
+   ))
+
+(defn black-white-grid [kii state]
+  (f/widget
+   (m/GridView
+    .gridDelegate
+    (m/SliverGridDelegateWithFixedCrossAxisCount .crossAxisCount 3
+                                                 .mainAxisSpacing 4
+                                                 .crossAxisSpacing 4
+                                                 ;; .mainAxisExtent double.maxFinite
+                                                 )
+    .children
+    []
+    )))
+
+
+
+(defn pixel
+  ([state kii color level]
+   (f/widget
+   :get [m/Navigator]
+   :let [
+         ;; color (cl/color kii)
+         text-color (cl/determine-fg-color color :cutoff 0.32)
+         tap-fn (case level
+                  1 (fn [] (swap! state update :routes
+                                  (fn [v] (conj v (color-grid kii state)))))
+                  2 (fn []) )
+         ]
+   (m/GestureDetector
+    .onTap ;; tap-fn
+                (fn [] (do (.push navigator ; (material-page (color-grid kii state))
+                                  (#/(m/MaterialPageRoute Object)
+                                     .builder (f/build (color-grid state kii)))
+                       ) nil ) )
+
+                 
+    .child
+    ;; (m/Padding
+    ;; .padding (m/EdgeInsets.all 2)
+    ;; .child
+    (m/Container
+     .color color
+     .child
+     (m/Center
+      .child
+      (m/Text (str (name kii) "\n0x"
+                   ;; TODO: correct to 6 figures
+                   (.toUpperCase
+                    (.toRadixString
+                     (.-value ;(.withAlpha
+                      ^m/Color color ; 0 )
+                     ) 16))
+                   )
+              .textAlign m/TextAlign.center
+              .style (m/TextStyle .color text-color
+                                  )) ) )
+    ;; )
+    )) ))
+
+(defn build-pixels
+  [state m level]
+  (let [map-count (count m)
+        filler-px (m/Container )
+        build-fn (fn [mp] (mapv (fn [[kii val]] (pixel state kii val level))
+                                (sort-by
+                                 (fn [[kii val]]
+                                   (.computeLuminance ^m/Color val)) mp)) )]
+    (if (> map-count 1)
+      (build-fn m)
+      (concat (build-fn (:shade m)) [filler-px filler-px] (build-fn (:accent m))))))
+
+
+(defn color-grid [state kii]
+  (m/Scaffold
+   .appBar (m/AppBar .title (m/Text (str "Flutter Color Finder\n" (name kii) )
+                                    .textAlign m/TextAlign.center)
+                     ;; .titleTextStyle (m/TextStyle)
+                     .centerTitle true)
+   .body
+   (f/widget
+   :let [
+         black-vec [:black12 :black26 :black38 :black45 :black54 :black87]
+         white-vec [:white10 :white12 :white24  :white30 :white38  :white54
+                    :white60  :white70]
+         shade-vec (into [50] (range 100 1000 100))
+         acc-vec (vec (range 100 500 100))
+         [axis-count color-map] (case kii
+                            :black [3 (make-color-map (into black-vec [kii]) )]
+                            :white [3 (make-color-map (into white-vec [kii]) )]
+                            (:brown :grey :blue-grey) [4 (make-color-map kii nil)]
+                            [4 (make-color-map kii true)])
+         children (build-pixels state color-map 2)
+         ]
+   (m/GridView
+    .gridDelegate
+    (m/SliverGridDelegateWithFixedCrossAxisCount .crossAxisCount 5
+                                                 .mainAxisSpacing 4
+                                                 .crossAxisSpacing 4
+                                                 ;; .mainAxisExtent double.maxFinite
+                                                 )
+    .children children
+    )) ))
+
+(defn btn-grid [state]
+  (let [basic-color-vec [:brown :deep-purple :purple :indigo :blue-grey :blue
+                         :light-blue :cyan :teal :green :light-green :lime
+                         :yellow :orange :deep-orange :red :pink :amber :grey
+                         :white :black]]
+   (f/widget
+    :let [color-map (zipmap basic-color-vec
+                             (mapv (fn [kii] (cl/color kii)) basic-color-vec) )
+          children (build-pixels state color-map 1)
+          ;; (mapv (fn [[kii val]] (pixel kii val state 1))
+          ;;       (sort-by (fn [[kii val]] (.computeLuminance ^m/Color val))
+          ;;                color-map))
+                         ]
+   (m/GridView
+    .gridDelegate
+    (m/SliverGridDelegateWithFixedCrossAxisCount .crossAxisCount 5
+                                                 .mainAxisSpacing 4
+                                                 .crossAxisSpacing 4
+                                                 ;; .mainAxisExtent double.maxFinite
+                                                 )
+    ;; (m/SliverGridDelegateWithMaxCrossAxisExtent .maxCrossAxisExtent 50)
+      ;; .physics (m/NeverScrollableScrollPhysics)
+    .children
+    children
+    ;; [
+    ;;  ;; btn/about-dialog
+    ;;  ;; btn/about-dialog-2
+    ;;  ;; btn/show
+    ;;  ;; btn/basic
+    ;;  ;; btn/basic-full
+    ;;  ;; btn/alert
+    ;;  ;; btn/container
+    ;;  ]
+    )) ))

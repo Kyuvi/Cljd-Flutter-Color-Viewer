@@ -1,0 +1,84 @@
+(ns finder
+(:require
+   ["package:flutter/material.dart" :as m]
+   ["package:flutter/services.dart" :as sv]
+   ;; ["dart:math" :as math]
+   [cljd.flutter :as f]
+   )
+(:require
+  [kjf.kyuthi :as kt]
+  [kjf.palette :as pl]
+  [kjf.dbg :as dbg :refer [dprn]]
+  [kjf.colors :as cl]
+  [btn-grid :as gd]
+  )
+  )
+
+(defonce clf-state (atom {:routes []}))
+
+(defn material-page [child]
+  (m/MaterialPage .child (m/Container .child child)))
+
+(defn finder-home [state]
+  (f/widget
+   :watch [{:keys [routes]} state]
+   :get [m/Navigator]
+   (m/Scaffold
+    .appBar (m/AppBar .title (m/Text (str "Flutter Color Finder" #_routes ))
+                      .centerTitle true
+                      ;; .automaticallyImplyLeading true
+                      ;; .leading (m/InkWell .onTap (fn [] (.pop navigator )) )
+                      )
+    .body
+    ;; (m/Navigator
+     ;; .pages
+     ;; (vec
+      ;; (concat
+       ;; [
+                    ;; (m/MaterialPage .child (m/Container .child
+                 ;; (m/FittedBox
+                  ;; .child
+        ;; (material-page
+         ;; (m/Scaffold
+          ;; .appBar (m/AppBar .title (m/Text (str "Flutter Color Finder" #_routes ))
+                      ;; .automaticallyImplyLeading true
+                      ;; .leading (m/InkWell .onTap (fn [] (.pop navigator )) )
+                      ;; )
+          ;; .body
+         (m/Center .child (m/AspectRatio .aspectRatio 1 .child
+                    (gd/btn-grid state)
+                    )
+     )
+                     ;; )
+                 ;; )
+                    ;; ) )
+        ;; ]
+       ;; (mapv material-page routes)
+       ;; ) )
+     ;; .onPopPage (fn [route result]
+                  ;; (swap! state update :routes pop)
+                  ;; (.didPop ^m/Route route result)))
+   ))
+  )
+
+(defn main []
+  (f/run
+   (f/widget
+     (m/MaterialApp
+      .title "Dialogs"
+      .theme kt/kyu-slzd-light-theme
+      ;; .theme (m/ThemeData.light)
+      .darkTheme kt/kyu-slzd-dark-theme
+      ;; .darkTheme (m/ThemeData.dark)
+      ;; .themeMode (m/ThemeMode.light)
+      .themeMode (m/ThemeMode.dark)
+      ;; .themeMode (m/ThemeMode.system)
+      ;; .theme (st-theme (.apply txt-theme
+      ;; .bodyColor (m/Colors.blue)
+      ;; .displayColor (m/Colors.blue)
+      ;; ))
+      .home
+                                        (
+             finder-home
+             clf-state)
+      ) ) ))
