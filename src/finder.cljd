@@ -19,50 +19,38 @@
 (defn material-page [child]
   (m/MaterialPage .child (m/Container .child child)))
 
-(defn finder-home [state]
+(defn finder-home [mode-props]
   (f/widget
-   :watch [{:keys [routes]} state]
-   :get [m/Navigator]
+   :watch [ ;{:keys [routes]} state
+           theme-switch mode-props]
+   ;; :get [m/Navigator]
    (m/Scaffold
-    .appBar (m/AppBar .title (m/Text (str "Flutter Color Finder" #_routes ))
-                      .centerTitle true
-                      ;; .automaticallyImplyLeading true
-                      ;; .leading (m/InkWell .onTap (fn [] (.pop navigator )) )
-                      )
+    .appBar
+                                         (gd/app-bar mode-props)
+    ;; (m/AppBar .title (m/Text (str "Flutter Color Finder" #_routes ))
+    ;;                   .actions [(m/IconButton .icon (m/Icon m/Icons.dark_mode_outlined)
+    ;;                                           .onPressed (fn []
+    ;;                                                        (swap! mode-props not)))]
+    ;;                   .centerTitle true
+    ;;                   ;; .automaticallyImplyLeading true
+    ;;                   ;; .leading (m/InkWell .onTap (fn [] (.pop navigator )) )
+    ;;                   )
     .body
-    ;; (m/Navigator
-     ;; .pages
-     ;; (vec
-      ;; (concat
-       ;; [
-                    ;; (m/MaterialPage .child (m/Container .child
-                 ;; (m/FittedBox
-                  ;; .child
-        ;; (material-page
-         ;; (m/Scaffold
-          ;; .appBar (m/AppBar .title (m/Text (str "Flutter Color Finder" #_routes ))
-                      ;; .automaticallyImplyLeading true
-                      ;; .leading (m/InkWell .onTap (fn [] (.pop navigator )) )
-                      ;; )
-          ;; .body
-         (m/Center .child (m/AspectRatio .aspectRatio 1 .child
-                    (gd/btn-grid state)
-                    )
-     )
-                     ;; )
-                 ;; )
-                    ;; ) )
-        ;; ]
-       ;; (mapv material-page routes)
-       ;; ) )
-     ;; .onPopPage (fn [route result]
-                  ;; (swap! state update :routes pop)
-                  ;; (.didPop ^m/Route route result)))
+    (m/Stack .children
+             [ (m/Center .child
+              (m/AspectRatio .aspectRatio 1 .child
+                                    (gd/btn-grid mode-props)
+                                    )
+              )
+              (m/Text (str (gd/build-shade-pixels mode-props
+                                               (gd/make-color-map :blue false)
+                                               2)) )] )
    ))
   )
 
 (defn main []
   (f/run
+    :watch [theme-switch (atom false) :as theme-atom]
    (f/widget
      (m/MaterialApp
       .title "Dialogs"
@@ -70,8 +58,8 @@
       ;; .theme (m/ThemeData.light)
       .darkTheme kt/kyu-slzd-dark-theme
       ;; .darkTheme (m/ThemeData.dark)
-      ;; .themeMode (m/ThemeMode.light)
-      .themeMode (m/ThemeMode.dark)
+      ;; .themeMode m/ThemeMode.light
+      .themeMode (if theme-switch m/ThemeMode.light m/ThemeMode.dark)
       ;; .themeMode (m/ThemeMode.system)
       ;; .theme (st-theme (.apply txt-theme
       ;; .bodyColor (m/Colors.blue)
@@ -80,5 +68,5 @@
       .home
                                         (
              finder-home
-             clf-state)
+             theme-atom)
       ) ) ))
