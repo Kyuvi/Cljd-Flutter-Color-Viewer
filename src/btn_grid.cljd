@@ -13,6 +13,8 @@
  )
 
 (defn app-bar
+  "App Bar with a dark mode switch (using mode-props) and also accepts
+  an optional 'name' argument to add under the basic title"
   ([mode-props]
    (app-bar mode-props nil))
   ([mode-props name]
@@ -31,6 +33,13 @@
                ))))
 
 (defn make-color-map
+  "Create a color map from a vector of color keywords,
+  or a keyword and an accent-preposition.
+  [color-vec] returns a map of color keywords to colors.
+  [kii accent-prep] returns a map in the form
+  {:color {:shades shade-map} {:accents accent-map}}
+  shade-map and accent maps are number to color maps
+  accent map is only present if accent-prep is true."
   ([color-vec]
    (zipmap color-vec
            (mapv (fn [kii] (cl/color kii)) color-vec)))
@@ -48,6 +57,10 @@
 
 
 (defn pixel
+  "Grid pixel which can be tapped to open up the color to different
+  shades/opacities depending on the keyword (kii) and the level.
+  The color of the pixel is color also prints the name of the color
+  with the shade and accent if given."
   ([mode-props kii color level]
    (pixel mode-props kii color level  nil nil))
   ([mode-props kii color level shade accent-prep]
@@ -82,7 +95,13 @@
               .style (m/TextStyle .color text-color
                                   ))))))))
 
-(defn build-shade-pixels [mode-props m level]
+(defn build-shade-pixels
+  "returns a vector of pixels for shade colors.
+  m should be a map of the form
+  {:color {:shades shade-map} {:accents accent-map}}
+  with a the accents-map being optional
+   "
+  [mode-props m level]
   (let [kii (first (keys m))
         shade-map (get-in m [kii :shades])
         accent-map (get-in m [kii :accents])
@@ -100,6 +119,7 @@
 
 
 (defn build-pixels
+  "Returns the grid pixel based on the number of key-val pairs in the map 'm'."
   [mode-props m level]
   (let [map-count (count m)
         filler-px (m/Container)
@@ -114,7 +134,10 @@
       (build-shade-pixels mode-props m level))))
 
 
-(defn color-grid [mode-props kii]
+(defn color-grid
+  "Return a Page with a grid and an app-bar with a theme-switch for the color
+  represented by kii."
+  [mode-props kii]
   (m/Scaffold
    .appBar
    (app-bar mode-props (name kii))
@@ -142,7 +165,10 @@
                                                  )
     .children children))))))
 
-(defn btn-grid [mode-props]
+(defn btn-grid
+  "Returns a grid with live pixels that when clicked switch the page to
+  a page based on that color."
+  [mode-props]
   (let [basic-color-vec [:brown :deep-purple :purple :indigo :blue-grey :blue
                          :light-blue :cyan :teal :green :light-green :lime
                          :yellow :orange :deep-orange :red :pink :amber :grey

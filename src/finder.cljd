@@ -14,12 +14,9 @@
   )
   )
 
-(defonce clf-state (atom {:routes []}))
-
-(defn material-page [child]
-  (m/MaterialPage .child (m/Container .child child)))
-
-(defn finder-home [mode-props]
+(defn finder-home
+  "Returns the home page with the live color grid"
+  [mode-props]
   (f/widget
    :watch [
            theme-switch mode-props]
