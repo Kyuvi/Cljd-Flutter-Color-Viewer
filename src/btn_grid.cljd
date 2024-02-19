@@ -7,21 +7,16 @@
    ;; ["dart:async" :as async]
    [cljd.flutter :as f])
  (:require
-  ;; [dlg-btns :as btn]
   [kjf.colors :as cl]
   [kjf.dbg :as db :refer [dprn]]
   )
  )
-
-;; (defn app-bar [tst]
-  ;; (m/AppBar .title (m/Text "tst")))
 
 (defn app-bar
   ([mode-props]
    (app-bar mode-props nil))
   ([mode-props name]
    (let [title-extension (when name (str "\n" name))]
-     ;; (m/AppBar .title (m/Text "tst")
       (m/AppBar .title (m/Text (str "Flutter Color Finder" title-extension)
                               .textAlign m/TextAlign.center)
                 .actions
@@ -34,9 +29,6 @@
                         .onPressed (fn [] (swap! mode-props not))))]
                .centerTitle true
                ))))
-
-(defn material-page [child]
-  (m/MaterialPage .child (m/Container .child child)))
 
 (defn make-color-map
   ([color-vec]
@@ -54,20 +46,6 @@
      {kii (merge shade-map accent-map)}
      )))
 
-(defn black-white-grid [kii mode-props]
-  (f/widget
-   (m/GridView
-    .gridDelegate
-    (m/SliverGridDelegateWithFixedCrossAxisCount .crossAxisCount 3
-                                                 .mainAxisSpacing 4
-                                                 .crossAxisSpacing 4
-                                                 ;; .mainAxisExtent double.maxFinite
-                                                 )
-    .children
-    []
-    )))
-
-
 
 (defn pixel
   ([mode-props kii color level]
@@ -75,26 +53,17 @@
   ([mode-props kii color level shade accent-prep]
    (f/widget
    :get [m/Navigator]
-   :let [
-         ;; color (cl/color kii)
-         text-color (cl/determine-fg-color color :cutoff 0.32)
+   :let [text-color (cl/determine-fg-color color :cutoff 0.32)
          tap-fn (case level
-                  1
-                  ;; (fn [] (swap! mode-props update :routes
-                                  ;; (fn [v] (conj v (color-grid kii mode-props)))))
-                  (fn [] (do (.push navigator ; (material-page (color-grid kii mode-props))
+                  1 (fn [] (do (.push navigator
                                   (#/(m/MaterialPageRoute Object)
                                      .builder (f/build (color-grid mode-props kii)))
                        ) nil ) )
-                  2 (fn []) )
-         ]
+                  2 (fn []) )]
    (m/GestureDetector
     .onTap  tap-fn
 
     .child
-    ;; (m/Padding
-    ;; .padding (m/EdgeInsets.all 2)
-    ;; .child
     (m/Container
      .color color
      .child
@@ -111,9 +80,7 @@
                    )
               .textAlign m/TextAlign.center
               .style (m/TextStyle .color text-color
-                                  )) ) )
-    ;; )
-    )) ))
+                                  ))))))))
 
 (defn build-shade-pixels [mode-props m level]
   (let [kii (first (keys m))
@@ -126,45 +93,34 @@
                      (mapv (fn [[shade val]] (pixel mode-props kii val level shade true))
                            (sort-by (fn [[shade val]]
                                    (.computeLuminance ^m/Color val)) accent-map)) )
-        filler-px (m/Container )
-        filler-vec (vec (repeat 2 filler-px))
-        ]
-    (vec (concat shade-vec filler-vec accent-vec))
-    ;; shade-vec
-    ;; m
-    ;; kii
-    ))
+        filler-px (m/Container)
+        filler-vec (vec (repeat 2 filler-px))]
+
+    (vec (concat shade-vec filler-vec accent-vec))))
 
 
 (defn build-pixels
   [mode-props m level]
   (let [map-count (count m)
-        filler-px (m/Container )
-        simple-build-fn (fn [mp] (mapv (fn [[kii val]] (pixel mode-props kii val level))
-                                (sort-by
-                                 (fn [[kii val]]
-                                   (.computeLuminance ^m/Color val)) mp)) )
-
-        ]
+        filler-px (m/Container)
+        simple-build-fn (fn [mp]
+                          (mapv
+                           (fn [[kii val]] (pixel mode-props kii val level))
+                           (sort-by
+                            (fn [[kii val]]
+                              (.computeLuminance ^m/Color val)) mp)))]
     (if (> map-count 1)
       (simple-build-fn m)
-      (build-shade-pixels mode-props m level)
-      ;; (concat (build-fn (:shade m)) [filler-px filler-px] (build-fn (:accent m))
-      ;; )
-    )))
+      (build-shade-pixels mode-props m level))))
 
 
 (defn color-grid [mode-props kii]
   (m/Scaffold
    .appBar
    (app-bar mode-props (name kii))
-   ;; (m/AppBar .title (m/Text (str "Flutter Color Finder\n" (name kii) )
-   ;;                                  .textAlign m/TextAlign.center)
-   ;;                   )
    .body
    (f/widget
-   :let [
-         black-vec [:black12 :black26 :black38 :black45 :black54 :black87]
+   :let [black-vec [:black12 :black26 :black38 :black45 :black54 :black87]
          white-vec [:white10 :white12 :white24  :white30 :white38  :white54
                     :white60  :white70]
          shade-vec (into [50] (range 100 1000 100))
@@ -174,8 +130,7 @@
                             :white [3 (make-color-map (into white-vec [kii]) )]
                             (:brown :grey :blue-grey) [4 (make-color-map kii nil)]
                             [4 (make-color-map kii true)])
-         children (build-pixels mode-props color-map 2)
-         ]
+         children (build-pixels mode-props color-map 2)]
    (m/Center
     .child
     (m/AspectRatio .aspectRatio 1
@@ -184,10 +139,8 @@
     (m/SliverGridDelegateWithFixedCrossAxisCount .crossAxisCount axis-count
                                                  .mainAxisSpacing 4
                                                  .crossAxisSpacing 4
-                                                 ;; .mainAxisExtent double.maxFinite
                                                  )
-    .children children
-    ) ) )) ))
+    .children children))))))
 
 (defn btn-grid [mode-props]
   (let [basic-color-vec [:brown :deep-purple :purple :indigo :blue-grey :blue
@@ -197,29 +150,11 @@
    (f/widget
     :let [color-map (zipmap basic-color-vec
                              (mapv (fn [kii] (cl/color kii)) basic-color-vec) )
-          children (build-pixels mode-props color-map 1)
-          ;; (mapv (fn [[kii val]] (pixel kii val mode-props 1))
-          ;;       (sort-by (fn [[kii val]] (.computeLuminance ^m/Color val))
-          ;;                color-map))
-                         ]
+          children (build-pixels mode-props color-map 1)]
    (m/GridView
     .gridDelegate
     (m/SliverGridDelegateWithFixedCrossAxisCount .crossAxisCount 5
                                                  .mainAxisSpacing 4
                                                  .crossAxisSpacing 4
-                                                 ;; .mainAxisExtent double.maxFinite
                                                  )
-    ;; (m/SliverGridDelegateWithMaxCrossAxisExtent .maxCrossAxisExtent 50)
-      ;; .physics (m/NeverScrollableScrollPhysics)
-    .children
-    children
-    ;; [
-    ;;  ;; btn/about-dialog
-    ;;  ;; btn/about-dialog-2
-    ;;  ;; btn/show
-    ;;  ;; btn/basic
-    ;;  ;; btn/basic-full
-    ;;  ;; btn/alert
-    ;;  ;; btn/container
-    ;;  ]
-    )) ))
+    .children children))))

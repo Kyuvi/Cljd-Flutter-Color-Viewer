@@ -7,8 +7,8 @@
    )
 (:require
   [kjf.kyuthi :as kt]
-  [kjf.palette :as pl]
-  [kjf.dbg :as dbg :refer [dprn]]
+  ;; [kjf.palette :as pl]
+  ;; [kjf.dbg :as dbg :refer [dprn]]
   [kjf.colors :as cl]
   [btn-grid :as gd]
   )
@@ -21,20 +21,10 @@
 
 (defn finder-home [mode-props]
   (f/widget
-   :watch [ ;{:keys [routes]} state
+   :watch [
            theme-switch mode-props]
-   ;; :get [m/Navigator]
    (m/Scaffold
-    .appBar
-                                         (gd/app-bar mode-props)
-    ;; (m/AppBar .title (m/Text (str "Flutter Color Finder" #_routes ))
-    ;;                   .actions [(m/IconButton .icon (m/Icon m/Icons.dark_mode_outlined)
-    ;;                                           .onPressed (fn []
-    ;;                                                        (swap! mode-props not)))]
-    ;;                   .centerTitle true
-    ;;                   ;; .automaticallyImplyLeading true
-    ;;                   ;; .leading (m/InkWell .onTap (fn [] (.pop navigator )) )
-    ;;                   )
+    .appBar (gd/app-bar mode-props)
     .body
     (m/Stack .children
              [ (m/Center .child
@@ -42,11 +32,7 @@
                                     (gd/btn-grid mode-props)
                                     )
               )
-              (m/Text (str (gd/build-shade-pixels mode-props
-                                               (gd/make-color-map :blue false)
-                                               2)) )] )
-   ))
-  )
+              ]))))
 
 (defn main []
   (f/run
@@ -55,18 +41,7 @@
      (m/MaterialApp
       .title "Dialogs"
       .theme kt/kyu-slzd-light-theme
-      ;; .theme (m/ThemeData.light)
       .darkTheme kt/kyu-slzd-dark-theme
-      ;; .darkTheme (m/ThemeData.dark)
-      ;; .themeMode m/ThemeMode.light
       .themeMode (if theme-switch m/ThemeMode.light m/ThemeMode.dark)
-      ;; .themeMode (m/ThemeMode.system)
-      ;; .theme (st-theme (.apply txt-theme
-      ;; .bodyColor (m/Colors.blue)
-      ;; .displayColor (m/Colors.blue)
-      ;; ))
-      .home
-                                        (
-             finder-home
-             theme-atom)
-      ) ) ))
+      .home (finder-home theme-atom)
+      ))))
