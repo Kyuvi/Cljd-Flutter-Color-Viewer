@@ -133,6 +133,11 @@
                                                acc-vec))} )]
      {kii (merge shade-map accent-map)})))
 
+(defn push-to-navigator [nav page]
+  (.push ^m/NavigatorState nav
+         (#/(m/MaterialPageRoute Object)
+            .builder (f/build page))))
+
 
 (defn pixel
   "Grid pixel which can be tapped to open up the color to different
@@ -146,22 +151,29 @@
     :get [m/Navigator]
     :let [text-color (cl/determine-fg-color color :cutoff 0.32)
           tap-fn (case level
-                   1 (fn [] (do (.push navigator
-                                       (#/(m/MaterialPageRoute Object)
-                                          .builder
-                                          (f/build (color-grid mode-props kii)))
-                                       ) nil ) )
-                   2 (fn [] (do (.push navigator
-                                       (#/(m/MaterialPageRoute Object)
-                                          .builder
-                                          (f/build
+                   1 (fn [] (do
+                              ;; (.push navigator
+                              ;;          (#/(m/MaterialPageRoute Object)
+                              ;;             .builder
+                              ;;             (f/build
+                              ;;              (color-grid mode-props kii))))
+                              (push-to-navigator navigator
+                                                (color-grid mode-props kii) )
+                                nil))
+                   2 (fn [] (do
+                              ;; (.push navigator
+                                       ;; (#/(m/MaterialPageRoute Object)
+                                          ;; .builder
+                                          ;; (f/build
+                              (push-to-navigator navigator
                                            (color-container mode-props
                                                             kii
                                                             color
                                                             text-color
                                                             shade
-                                                            accent-prep)))
-                                       ) nil ) ) )]
+                                                            accent-prep))
+                              ;; ))
+                                nil)))]
     (m/LayoutBuilder
      .builder
      (f/build
