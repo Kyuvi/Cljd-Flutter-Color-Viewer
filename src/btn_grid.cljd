@@ -66,8 +66,9 @@
 (defn color-container
   "Return a page of color 'color' accented and shaded if appropriate
    with its properties written in color text-color"
-  ([mode-props kii color text-color shade accent-prep]
-   (m/Scaffold
+  ([mode-props color-desc-vec]
+   (let [[kii color text-color shade accent-prep] color-desc-vec]
+       (m/Scaffold
     .appBar (app-bar mode-props
                      (color-name-str (name kii) shade accent-prep))
     .body
@@ -90,7 +91,7 @@
                                                :accent accent-prep }
                                               {:height maxHeight
                                                :text-color text-color
-                                               :max true}))))))))))
+                                               :max true})))))))) )))
 
 (defn make-color-map
   "Create a color map from a vector of color keywords,
@@ -139,8 +140,9 @@
                               nil))
                    2 (fn [] (do (push-to-navigator
                                  navigator
-                                 (color-container mode-props kii color
-                                                  text-color shade accent-prep))
+                                 (color-container mode-props
+                                                  [kii color text-color
+                                                   shade accent-prep]))
                                 nil)))]
     (m/LayoutBuilder
      .builder
