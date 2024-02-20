@@ -1,4 +1,6 @@
 (ns finder
+  "An application for finding the basic colors provided by flutter
+   and their hex numbers."
 (:require
    ["package:flutter/material.dart" :as m]
    ["package:flutter/services.dart" :as sv]
@@ -18,17 +20,16 @@
   "Returns the home page with the live color grid"
   [mode-props]
   (f/widget
-   :watch [
-           theme-switch mode-props]
+   ;; :watch [theme-switch mode-props]
    (m/Scaffold
     .appBar (gd/app-bar mode-props)
     .body
     (m/Stack .children
-             [ (m/Center .child
-              (m/AspectRatio .aspectRatio 1 .child
-                                    (gd/btn-grid mode-props)
-                                    )
-              )
+             [ (m/Center
+                .child
+                (m/AspectRatio .aspectRatio 1
+                               .child (gd/btn-grid mode-props)))
+
               ]))))
 
 (defn main []
@@ -37,6 +38,7 @@
    (f/widget
      (m/MaterialApp
       .title "Dialogs"
+      ;; .darkTheme (m/ThemeData.dark)
       .theme kt/kyu-slzd-light-theme
       .darkTheme kt/kyu-slzd-dark-theme
       .themeMode (if theme-switch m/ThemeMode.light m/ThemeMode.dark)
