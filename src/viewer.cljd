@@ -1,4 +1,4 @@
-(ns finder
+(ns viewer
   "An application for finding the basic colors provided by flutter
    and their hex numbers."
 (:require

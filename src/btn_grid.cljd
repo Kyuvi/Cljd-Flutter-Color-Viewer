@@ -18,7 +18,7 @@
    (app-bar mode-props nil))
   ([mode-props name]
    (let [title-extension (when name (str "\n" name))]
-     (m/AppBar .title (m/Text (str "Flutter Color Finder" title-extension)
+     (m/AppBar .title (m/Text (str "Flutter Color Viewer" title-extension)
                               .textAlign m/TextAlign.center)
                .actions
                [ (f/widget

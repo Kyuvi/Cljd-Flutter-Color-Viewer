@@ -8,5 +8,5 @@
         kjd/kjd {:local/root "../../kjd/"}
         }
  :aliases {:cljd {:main-opts ["-m" "cljd.build"]}}
- :cljd/opts {:main finder
+ :cljd/opts {:main viewer
              :kind :flutter}}
