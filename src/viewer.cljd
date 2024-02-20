@@ -3,33 +3,27 @@
    and their hex numbers."
 (:require
    ["package:flutter/material.dart" :as m]
-   ["package:flutter/services.dart" :as sv]
-   ;; ["dart:math" :as math]
    [cljd.flutter :as f]
    )
 (:require
   [kjf.kyuthi :as kt]
-  ;; [kjf.palette :as pl]
-  ;; [kjf.dbg :as dbg :refer [dprn]]
   [kjf.colors :as cl]
   [btn-grid :as gd]
   )
   )
 
-(defn finder-home
+(defn viewer-home
   "Returns the home page with the live color grid"
   [mode-props]
   (f/widget
-   ;; :watch [theme-switch mode-props]
    (m/Scaffold
     .appBar (gd/app-bar mode-props)
     .body
     (m/Stack .children
-             [ (m/Center
+             [(m/Center
                 .child
                 (m/AspectRatio .aspectRatio 1
                                .child (gd/btn-grid mode-props)))
-
               ]))))
 
 (defn main []
@@ -37,10 +31,10 @@
     :watch [theme-switch (atom false) :as theme-atom]
    (f/widget
      (m/MaterialApp
-      .title "Dialogs"
+      .title "Flutter Color Viewer"
       ;; .darkTheme (m/ThemeData.dark)
       .theme kt/kyu-slzd-light-theme
       .darkTheme kt/kyu-slzd-dark-theme
       .themeMode (if theme-switch m/ThemeMode.light m/ThemeMode.dark)
-      .home (finder-home theme-atom)
+      .home (viewer-home theme-atom)
       ))))

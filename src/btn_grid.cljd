@@ -1,10 +1,6 @@
-
 (ns btn-grid
   (:require
    ["package:flutter/material.dart" :as m]
-   ;; ["package:flutter/services.dart" :as sv]
-   ;; ["dart:math" :as math]
-   ;; ["dart:async" :as async]
    [cljd.flutter :as f])
   (:require
    [kjf.colors :as cl]
@@ -21,21 +17,22 @@
      (m/AppBar .title (m/Text (str "Flutter Color Viewer" title-extension)
                               .textAlign m/TextAlign.center)
                .actions
-               [ (f/widget
+               [(f/widget
                   :watch [mode-switch mode-props]
                   (m/IconButton
                    .icon (m/Icon (if mode-switch
                                    m/Icons.dark_mode_outlined
                                    m/Icons.light_mode_outlined))
                    .onPressed (fn [] (swap! mode-props not))))]
-               .centerTitle true))))
+               .centerTitle true
+               ))))
 
 
 (defn color-name-str
   "Return a string containing the full name of the color depending on
   name (str) shade (int) and accent-prep (bool)."
   [name shade accent-prep]
-   (str name (when accent-prep "-accent") (when shade " ") shade))
+  (str name (when accent-prep "-accent") (when shade " ") shade))
 
 (defn color-text
   "Retun a Text object based on the color-props and text-props maps"
@@ -43,50 +40,36 @@
   (let [{:keys [kii color shade accent]} color-props
         {:keys [height text-color max]} text-props
         {:flds [red green blue alpha opacity value]} ^m/Color color
-        ;; when-gt (fn [c-height child] (when (> height c-height) child))
         c-height (if height height double.maxFinite)
         ]
-     (m/Padding
-      .padding (m/EdgeInsets.only .top (if (and max (> c-height 200) ) 20 0))
-      .child
-      (m/Text (str (color-name-str (name kii) shade accent)
-                   ;; (when accent "-accent")
-                 ;; (when shade " ") shade ; "\n"
-                 ;; (when-gt 64)
-                 ;; TODO: correct to 6 figures
-                 (when (> c-height 64)
-                   (str  "\n0x" (.toUpperCase (.toRadixString
-                                               ;; (.-value ;(.withAlpha
-                                               ;; ^m/Color color ; 0 )
-                                               ;; )
-                                               value 16)) ) )
-                 (when (or (and max (> c-height 114))  #_(> c-height 200))
-                   (str "\n\nred = " red
-                        "\ngreen = " green
-                        "\nblue = " blue "\n"
-                        "\nalpha =" alpha "\n"
-                        "opacity = " opacity  "\n"))
-                 ;; "\n" height
-                 )
-            .textAlign m/TextAlign.center
-            .style (m/TextStyle .color text-color
-                                .fontSize (cond (< c-height 44) 10
-                                                ;; (and max
-                                                     (> c-height 208)
-                                                     ;; )
-                                                32))) ) ))
+    (m/Padding
+     .padding (m/EdgeInsets.only .top (if (and max (> c-height 200) ) 20 0))
+     .child
+     (m/Text (str (color-name-str (name kii) shade accent)
+                  (when (> c-height 64)
+                    (str  "\n0x" (.toUpperCase (.toRadixString
+                                                value 16))))
+                  (when (or (and max (> c-height 114))  #_(> c-height 200))
+                    (str "\n\nred = " red
+                         "\ngreen = " green
+                         "\nblue = " blue "\n"
+                         "\nalpha =" alpha "\n"
+                         "opacity = " opacity  "\n"))
+                  ;; "\n" height
+                  )
+             .textAlign m/TextAlign.center
+             .style (m/TextStyle .color text-color
+                                 .fontSize (cond (< c-height 44) 10
+                                                 (> c-height 208) 32))) ) ))
 
 
 (defn color-container
   "Return a page of color 'color' accented and shaded if appropriate
    with its properties written in color text-color"
-  ;; ([mode-props kii color text-color] )
   ([mode-props kii color text-color shade accent-prep]
    (m/Scaffold
-    .appBar (app-bar mode-props (color-name-str (name kii) shade accent-prep)
-                     ;; (str (name kii) (when accent-prep "-accent")
-                                ;;      (when shade " ") shade )
-                     )
+    .appBar (app-bar mode-props
+                     (color-name-str (name kii) shade accent-prep))
     .body
     (f/widget
      (m/LayoutBuilder
@@ -100,7 +83,6 @@
                                                 :else 10))
                 .child (m/Center .child
                                  (m/FittedBox
-                                  ;; .fit m/BoxFit.fill
                                   .child
                                   (color-text {:kii kii
                                                :color color
@@ -152,27 +134,13 @@
     :let [text-color (cl/determine-fg-color color :cutoff 0.32)
           tap-fn (case level
                    1 (fn [] (do
-                              ;; (.push navigator
-                              ;;          (#/(m/MaterialPageRoute Object)
-                              ;;             .builder
-                              ;;             (f/build
-                              ;;              (color-grid mode-props kii))))
                               (push-to-navigator navigator
-                                                (color-grid mode-props kii) )
-                                nil))
-                   2 (fn [] (do
-                              ;; (.push navigator
-                                       ;; (#/(m/MaterialPageRoute Object)
-                                          ;; .builder
-                                          ;; (f/build
-                              (push-to-navigator navigator
-                                           (color-container mode-props
-                                                            kii
-                                                            color
-                                                            text-color
-                                                            shade
-                                                            accent-prep))
-                              ;; ))
+                                                 (color-grid mode-props kii))
+                              nil))
+                   2 (fn [] (do (push-to-navigator
+                                 navigator
+                                 (color-container mode-props kii color
+                                                  text-color shade accent-prep))
                                 nil)))]
     (m/LayoutBuilder
      .builder
@@ -211,7 +179,7 @@
                              (pixel mode-props kii val level shade true))
                            (sort-by (fn [[shade val]]
                                       (.computeLuminance ^m/Color val))
-                                    accent-map)) )
+                                    accent-map)))
         filler-px (m/Container)
         filler-vec (vec (repeat 2 filler-px))]
 
@@ -265,9 +233,8 @@
        .gridDelegate
        (m/SliverGridDelegateWithFixedCrossAxisCount .crossAxisCount axis-count
                                                     .mainAxisSpacing 4
-                                                    .crossAxisSpacing 4
-                                                    )
-              .children children))))))
+                                                    .crossAxisSpacing 4)
+       .children children))))))
 
 (defn btn-grid
   "Returns a grid with live pixels that when clicked switch the page to
@@ -285,6 +252,5 @@
       .gridDelegate
       (m/SliverGridDelegateWithFixedCrossAxisCount .crossAxisCount 5
                                                    .mainAxisSpacing 4
-                                                   .crossAxisSpacing 4
-                                                   )
+                                                   .crossAxisSpacing 4)
       .children children))))
