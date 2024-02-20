@@ -31,7 +31,19 @@
                         .onPressed (fn [] (swap! mode-props not))))]
                .centerTitle true
                ))))
+(defn color-name-str
+  "Return a string containing the full name of the color depending on
+  name (str) shade (int) and accent-prep (bool)."
+  [name shade accent-prep]
+   (str name (when accent-prep "-accent") (when shade " ") shade))
 
+      (m/Text (str (color-name-str (name kii) shade accent)
+                   ;; (when accent "-accent")
+                 ;; (when shade " ") shade ; "\n"
+    .appBar (app-bar mode-props (color-name-str (name kii) shade accent-prep)
+                     ;; (str (name kii) (when accent-prep "-accent")
+                                ;;      (when shade " ") shade )
+                     )
 (defn make-color-map
   "Create a color map from a vector of color keywords,
   or a keyword and an accent-preposition.
