@@ -19,27 +19,65 @@
    (app-bar mode-props nil))
   ([mode-props name]
    (let [title-extension (when name (str "\n" name))]
-      (m/AppBar .title (m/Text (str "Flutter Color Finder" title-extension)
+     (m/AppBar .title (m/Text (str "Flutter Color Finder" title-extension)
                               .textAlign m/TextAlign.center)
-                .actions
-                [ (f/widget
-                 :watch [mode-switch mode-props]
-                 (m/IconButton
-                        .icon (m/Icon (if mode-switch
-                                        m/Icons.dark_mode_outlined
-                                        m/Icons.light_mode_outlined))
-                        .onPressed (fn [] (swap! mode-props not))))]
-               .centerTitle true
-               ))))
+               .actions
+               [ (f/widget
+                  :watch [mode-switch mode-props]
+                  (m/IconButton
+                   .icon (m/Icon (if mode-switch
+                                   m/Icons.dark_mode_outlined
+                                   m/Icons.light_mode_outlined))
+                   .onPressed (fn [] (swap! mode-props not))))]
+               .centerTitle true))))
+
+
 (defn color-name-str
   "Return a string containing the full name of the color depending on
   name (str) shade (int) and accent-prep (bool)."
   [name shade accent-prep]
    (str name (when accent-prep "-accent") (when shade " ") shade))
 
+(defn color-text
+  "Retun a Text object based on the color-props and text-props maps"
+  [color-props text-props]
+  (let [{:keys [kii color shade accent]} color-props
+        {:keys [height text-color max]} text-props
+        {:flds [red green blue alpha opacity value]} ^m/Color color
+        ;; when-gt (fn [c-height child] (when (> height c-height) child))
+        c-height (if height height double.maxFinite)
+        ]
+     (m/Padding
+      .padding (m/EdgeInsets.only .top (if (and max (> c-height 200) ) 20 0))
+      .child
       (m/Text (str (color-name-str (name kii) shade accent)
                    ;; (when accent "-accent")
                  ;; (when shade " ") shade ; "\n"
+                 ;; (when-gt 64)
+                 ;; TODO: correct to 6 figures
+                 (when (> c-height 64)
+                   (str  "\n0x" (.toUpperCase (.toRadixString
+                                               ;; (.-value ;(.withAlpha
+                                               ;; ^m/Color color ; 0 )
+                                               ;; )
+                                               value 16)) ) )
+                 (when (or (and max (> c-height 114))  #_(> c-height 200))
+                   (str "\n\nred = " red
+                        "\ngreen = " green
+                        "\nblue = " blue "\n"
+                        "\nalpha =" alpha "\n"
+                        "opacity = " opacity  "\n"))
+                 ;; "\n" height
+                 )
+            .textAlign m/TextAlign.center
+            .style (m/TextStyle .color text-color
+                                .fontSize (cond (< c-height 44) 10
+                                                ;; (and max
+                                                     (> c-height 208)
+                                                     ;; )
+                                                32))) ) ))
+
+
     .appBar (app-bar mode-props (color-name-str (name kii) shade accent-prep)
                      ;; (str (name kii) (when accent-prep "-accent")
                                 ;;      (when shade " ") shade )
@@ -94,18 +132,12 @@
      .child
      (m/Center
       .child
-      (m/Text (str (name kii) (when accent-prep "-accent")
-                   (when shade " ") shade "\n0x"
-                   ;; TODO: correct to 6 figures
-                   (.toUpperCase
-                    (.toRadixString
-                     (.-value ;(.withAlpha
-                      ^m/Color color ; 0 )
-                     ) 16))
-                   )
-              .textAlign m/TextAlign.center
-              .style (m/TextStyle .color text-color
-                                  ))))))))
+         .child (color-text {:kii kii
+                             :color color
+                             :shade shade
+                             :accent accent-prep}
+                            {:height maxHeight
+                             :text-color text-color})))))))))
 
 (defn build-shade-pixels
   "returns a vector of pixels for shade colors.
