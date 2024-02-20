@@ -24,8 +24,7 @@
                                    m/Icons.dark_mode_outlined
                                    m/Icons.light_mode_outlined))
                    .onPressed (fn [] (swap! mode-props not))))]
-               .centerTitle true
-               ))))
+               .centerTitle true))))
 
 
 (defn color-name-str
@@ -60,7 +59,7 @@
              .textAlign m/TextAlign.center
              .style (m/TextStyle .color text-color
                                  .fontSize (cond (< c-height 44) 10
-                                                 (> c-height 208) 32))) ) ))
+                                                 (> c-height 208) 32))))))
 
 
 (defn color-container
@@ -91,7 +90,7 @@
                                                :accent accent-prep }
                                               {:height maxHeight
                                                :text-color text-color
-                                               :max true})))))))) )))
+                                               :max true} )))))))))))
 
 (defn make-color-map
   "Create a color map from a vector of color keywords,
@@ -114,7 +113,7 @@
                       {:accents (zipmap
                                  acc-vec (mapv (fn [k] (cl/color kii :ac k))
                                                acc-vec))} )]
-     {kii (merge shade-map accent-map)})))
+     {kii (merge shade-map accent-map)} )))
 
 (defn push-to-navigator [nav page]
   (.push ^m/NavigatorState nav
@@ -150,7 +149,7 @@
      .builder
      (f/build
       [constr]
-      :let [{:flds [maxHeight]}  ^m/BoxConstraints constr]
+      :let [{:flds [maxHeight]} ^m/BoxConstraints constr]
       (m/GestureDetector
        .onTap tap-fn
        .child
@@ -163,7 +162,7 @@
                              :shade shade
                              :accent accent-prep}
                             {:height maxHeight
-                             :text-color text-color})))))))))
+                             :text-color text-color} )))))))))
 
 (defn build-shade-pixels
   "Returns a vector of pixels for shade colors.
@@ -222,9 +221,9 @@
           acc-vec (vec (range 100 500 100))
           [axis-count color-map] (case kii
                                    :black [3 (make-color-map
-                                              (into black-vec [kii]) )]
+                                              (into black-vec [kii]))]
                                    :white [3 (make-color-map
-                                              (into white-vec [kii]) )]
+                                              (into white-vec [kii]))]
                                    (:brown :grey :blue-grey) [4 (make-color-map kii nil)]
                                    [4 (make-color-map kii true)])
           children (build-pixels mode-props color-map 2)]
