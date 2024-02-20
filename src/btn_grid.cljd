@@ -121,11 +121,13 @@
          (#/(m/MaterialPageRoute Object)
             .builder (f/build page))))
 
+;; called from pixel, not needed in clojureDart but "consistency"
+(declare color-grid)
 
 (defn pixel
   "Grid pixel which can be tapped to open up the color to different
   shades/opacities depending on the keyword (kii) and the level.
-  The color of the pixel is color also prints the name of the color
+  The color of the pixel is 'color' and it also prints the name of the color
   with the shade and accent if given."
   ([mode-props kii color level]
    (pixel mode-props kii color level  nil nil))
