@@ -1,4 +1,5 @@
 (ns colors
+  "Color utilities used by Flutter Color Viewer."
   {:author "Kyuvi"
    :license {:name "GPL-3.0 WITH Classpath-exception-2.0"
              :url "https://www.gnu.org/licenses/gpl-3.0.html"}}
@@ -7,7 +8,6 @@
    [cljd.flutter :as f]
    )
   )
-
 
 (defn color
   "([val] [k acc-shade] [k accent-prep shade])
@@ -60,7 +60,7 @@
                  :yellow m/Colors.yellow :yellow-accent m/Colors.yellowAccent}
                 val)]
        ret-color
-     )))
+       )))
   ([kii acc-shade]
    (cond (number? acc-shade)
          (color kii nil acc-shade)
@@ -69,22 +69,22 @@
          :else (color kii)))
   ([kii accent-prep shade]
    (let [accent-color (when accent-prep
-                           (get {:amber m/Colors.amberAccent
-                                 :blue m/Colors.blueAccent
-                                 :cyan m/Colors.cyanAccent
-                                 :deep-orange m/Colors.deepOrangeAccent
-                                 :deep-purple m/Colors.deepPurpleAccent
-                                 :green m/Colors.greenAccent
-                                 :indigo m/Colors.indigoAccent
-                                 :light-blue m/Colors.lightBlueAccent
-                                 :light-green m/Colors.lightGreenAccent
-                                 :lime m/Colors.limeAccent
-                                 :orange m/Colors.orangeAccent
-                                 :pink m/Colors.pinkAccent
-                                 :purple m/Colors.purpleAccent
-                                 :red m/Colors.redAccent
-                                 :teal m/Colors.tealAccent
-                                 :yellow m/Colors.yellowAccent} kii))
+                        (get {:amber m/Colors.amberAccent
+                              :blue m/Colors.blueAccent
+                              :cyan m/Colors.cyanAccent
+                              :deep-orange m/Colors.deepOrangeAccent
+                              :deep-purple m/Colors.deepPurpleAccent
+                              :green m/Colors.greenAccent
+                              :indigo m/Colors.indigoAccent
+                              :light-blue m/Colors.lightBlueAccent
+                              :light-green m/Colors.lightGreenAccent
+                              :lime m/Colors.limeAccent
+                              :orange m/Colors.orangeAccent
+                              :pink m/Colors.pinkAccent
+                              :purple m/Colors.purpleAccent
+                              :red m/Colors.redAccent
+                              :teal m/Colors.tealAccent
+                              :yellow m/Colors.yellowAccent} kii))
          shade-map (if accent-color
                      {100 #(.-shade100 ^m/MaterialAccentColor %)
                       200 #(.-shade200 ^m/MaterialAccentColor %)

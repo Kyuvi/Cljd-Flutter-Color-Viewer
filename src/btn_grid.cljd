@@ -1,4 +1,5 @@
 (ns btn-grid
+  "Main widgets and containers used by Flutter Color Viewer."
   {:author "Kyuvi"
    :license {:name "GPL-3.0 WITH Classpath-exception-2.0"
              :url "https://www.gnu.org/licenses/gpl-3.0.html"}}
@@ -21,12 +22,12 @@
                               .textAlign m/TextAlign.center)
                .actions
                [(f/widget
-                  :watch [mode-switch mode-props]
-                  (m/IconButton
-                   .icon (m/Icon (if mode-switch
-                                   m/Icons.dark_mode_outlined
-                                   m/Icons.light_mode_outlined))
-                   .onPressed (fn [] (swap! mode-props not))))]
+                 :watch [mode-switch mode-props]
+                 (m/IconButton
+                  .icon (m/Icon (if mode-switch
+                                  m/Icons.dark_mode_outlined
+                                  m/Icons.light_mode_outlined))
+                  .onPressed (fn [] (swap! mode-props not))))]
                .centerTitle true))))
 
 
@@ -70,30 +71,30 @@
    with its properties written in color text-color"
   ([mode-props color-desc-vec]
    (let [[kii color text-color shade accent-prep] color-desc-vec]
-       (m/Scaffold
-    .appBar (app-bar mode-props
-                     (color-name-str (name kii) shade accent-prep))
-    .body
-    (f/widget
-     (m/LayoutBuilder
-      .builder
-      (f/build [constr]
-               :let [{:flds [maxHeight]} ^m/BoxConstraints constr]
-               (m/Container
-                .color color
-                .margin (m/EdgeInsets.all (cond (> maxHeight 400) 40
-                                                (> maxHeight 220) 20
-                                                :else 10))
-                .child (m/Center .child
-                                 (m/FittedBox
-                                  .child
-                                  (color-text {:kii kii
-                                               :color color
-                                               :shade shade
-                                               :accent accent-prep }
-                                              {:height maxHeight
-                                               :text-color text-color
-                                               :max true} )))))))))))
+     (m/Scaffold
+      .appBar (app-bar mode-props
+                       (color-name-str (name kii) shade accent-prep))
+      .body
+      (f/widget
+       (m/LayoutBuilder
+        .builder
+        (f/build [constr]
+                 :let [{:flds [maxHeight]} ^m/BoxConstraints constr]
+                 (m/Container
+                  .color color
+                  .margin (m/EdgeInsets.all (cond (> maxHeight 400) 40
+                                                  (> maxHeight 220) 20
+                                                  :else 10))
+                  .child (m/Center .child
+                                   (m/FittedBox
+                                    .child
+                                    (color-text {:kii kii
+                                                 :color color
+                                                 :shade shade
+                                                 :accent accent-prep }
+                                                {:height maxHeight
+                                                 :text-color text-color
+                                                 :max true} )))))))))))
 
 (defn make-color-map
   "Create a color map from a vector of color keywords,

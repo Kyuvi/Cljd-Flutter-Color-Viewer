@@ -1,7 +1,6 @@
 (ns viewer
   "An application for finding the basic colors (except transparent)
   provided by flutter and their numerical values."
-(:require
   {:author "Kyuvi"
    :license {:name "GPL-3.0 WITH Classpath-exception-2.0"
              :url "https://www.gnu.org/licenses/gpl-3.0.html"}}
@@ -9,11 +8,11 @@
    ["package:flutter/material.dart" :as m]
    [cljd.flutter :as f]
    )
-(:require
-  [kjf.kyuthi :as kt]
-  [colors :as cl]
-  [btn-grid :as gd]
-  )
+  (:require
+   [kjf.kyuthi :as kt]
+   [colors :as cl]
+   [btn-grid :as gd]
+   )
   )
 
 (defn viewer-home
@@ -25,20 +24,19 @@
     .body
     (m/Stack .children
              [(m/Center
-                .child
-                (m/AspectRatio .aspectRatio 1
-                               .child (gd/btn-grid mode-props)))
+               .child
+               (m/AspectRatio .aspectRatio 1
+                              .child (gd/btn-grid mode-props)))
               ]))))
 
 (defn main []
   (f/run
     :watch [theme-switch (atom false) :as theme-atom]
-   (f/widget
-     (m/MaterialApp
-      .title "Flutter Color Viewer"
-      ;; .darkTheme (m/ThemeData.dark)
-      .theme kt/kyu-slzd-light-theme
-      .darkTheme kt/kyu-slzd-dark-theme
-      .themeMode (if theme-switch m/ThemeMode.light m/ThemeMode.dark)
-      .home (viewer-home theme-atom)
-      ))))
+    (m/MaterialApp
+     .title "Flutter Color Viewer"
+     .darkTheme (m/ThemeData.dark)
+     ;; .theme kt/kyu-slzd-light-theme
+     ;; .darkTheme kt/kyu-slzd-dark-theme
+     .themeMode (if theme-switch m/ThemeMode.light m/ThemeMode.dark)
+     .home (viewer-home theme-atom)
+     )))
