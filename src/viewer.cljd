@@ -7,7 +7,7 @@
    )
 (:require
   [kjf.kyuthi :as kt]
-  [kjf.colors :as cl]
+  [colors :as cl]
   [btn-grid :as gd]
   )
   )

@@ -1,7 +1,144 @@
 (ns colors
   (:require
    ["package:flutter/material.dart" :as m]
-   ;; ["dart:ui" :as ui]
    [cljd.flutter :as f]
    )
   )
+
+
+(defn color
+  "([val] [k acc-shade] [k accent-prep shade])
+  Function to lispify dart colors,
+  [val] - return color if possible, val can be a number or keyword representing
+  a color.
+  [color-keyword acc-shade] - If acc-shade is a number, return color with shade,
+   otherwise return color with accent.
+  [color-keyword accent-prep shade] - Return accented color with
+  corresponding shade if possible.
+  NOTE: as long as a similar color exists, will not produce an error but quietly
+  return the similar color. i.e (color :lime :ac 500) will actually return
+  m/Colors.lime-accent because there is no 500 accent shade,
+  and (color :brown :ac 200) will return m/Colors.brown.shade200
+  as there is no brown accent."
+  ([val]
+   (if (number? val)
+     (m/Color val)
+     (let [ret-color
+           (get {:amber m/Colors.amber :amber-accent m/Colors.amberAccent
+                 :black m/Colors.black :black12 m/Colors.black12
+                 :black26 m/Colors.black26 :black38 m/Colors.black38
+                 :black45 m/Colors.black45 :black54 m/Colors.black54
+                 :black87 m/Colors.black87 :blue m/Colors.blue
+                 :blue-accent m/Colors.blueAccent :blue-grey m/Colors.blueGrey
+                 :brown m/Colors.brown :cyan m/Colors.cyan
+                 :cyan-accent m/Colors.cyanAccent
+                 :deep-orange m/Colors.deepOrange
+                 :deep-orange-accent m/Colors.deepOrangeAccent
+                 :deep-purple m/Colors.deepPurple
+                 :deep-purple-accent m/Colors.deepPurpleAccent
+                 :green m/Colors.green :green-accent m/Colors.greenAccent
+                 :grey m/Colors.grey :indigo m/Colors.indigo
+                 :indigo-accent m/Colors.indigoAccent
+                 :light-blue m/Colors.lightBlue
+                 :light-blue-accent m/Colors.lightBlueAccent
+                 :light-green m/Colors.lightGreen
+                 :light-green-accent m/Colors.lightGreenAccent
+                 :lime m/Colors.lime :lime-accent m/Colors.limeAccent
+                 :orange m/Colors.orange :orange-accent m/Colors.orangeAccent
+                 :pink m/Colors.pink :pink-accent m/Colors.pinkAccent
+                 :purple m/Colors.purple :purple-accent m/Colors.purpleAccent
+                 :red m/Colors.red :red-accent m/Colors.redAccent
+                 :teal m/Colors.teal :teal-accent m/Colors.tealAccent
+                 :transparent m/Colors.transparent :white m/Colors.white
+                 :white10 m/Colors.white10 :white12 m/Colors.white12
+                 :white24 m/Colors.white24 :white30 m/Colors.white30
+                 :white38 m/Colors.white38 :white54 m/Colors.white54
+                 :white60 m/Colors.white60 :white70 m/Colors.white70
+                 :yellow m/Colors.yellow :yellow-accent m/Colors.yellowAccent}
+                val)]
+       ret-color
+     )))
+  ([kii acc-shade]
+   (cond (number? acc-shade)
+         (color kii nil acc-shade)
+         (or (true? acc-shade) (keyword? acc-shade) )
+         (color kii acc-shade nil)
+         :else (color kii)))
+  ([kii accent-prep shade]
+   (let [accent-color (when accent-prep
+                           (get {:amber m/Colors.amberAccent
+                                 :blue m/Colors.blueAccent
+                                 :cyan m/Colors.cyanAccent
+                                 :deep-orange m/Colors.deepOrangeAccent
+                                 :deep-purple m/Colors.deepPurpleAccent
+                                 :green m/Colors.greenAccent
+                                 :indigo m/Colors.indigoAccent
+                                 :light-blue m/Colors.lightBlueAccent
+                                 :light-green m/Colors.lightGreenAccent
+                                 :lime m/Colors.limeAccent
+                                 :orange m/Colors.orangeAccent
+                                 :pink m/Colors.pinkAccent
+                                 :purple m/Colors.purpleAccent
+                                 :red m/Colors.redAccent
+                                 :teal m/Colors.tealAccent
+                                 :yellow m/Colors.yellowAccent} kii))
+         shade-map (if accent-color
+                     {100 #(.-shade100 ^m/MaterialAccentColor %)
+                      200 #(.-shade200 ^m/MaterialAccentColor %)
+                      400 #(.-shade400 ^m/MaterialAccentColor %)
+                      700 #(.-shade700 ^m/MaterialAccentColor %)}
+                     {50 #(.-shade50 ^m/MaterialColor %)
+                      100 #(.-shade100 ^m/MaterialColor %)
+                      200 #(.-shade200 ^m/MaterialColor %)
+                      300 #(.-shade300 ^m/MaterialColor %)
+                      400 #(.-shade400 ^m/MaterialColor %)
+                      500 #(.-shade500 ^m/MaterialColor %)
+                      600 #(.-shade600 ^m/MaterialColor %)
+                      700 #(.-shade700 ^m/MaterialColor %)
+                      800 #(.-shade800 ^m/MaterialColor %)
+                      900 #(.-shade900 ^m/MaterialColor %)})
+         shade-fn (get shade-map shade)
+         main-color (if accent-color
+                      accent-color
+                      (color kii))]
+     (if shade-fn
+       (shade-fn main-color)
+       main-color))))
+
+(defn rgbo
+  "Return color consiting 'red' 'green' 'blue' with 'opacity'."
+  [red green blue opacity]
+  (m/Color.fromRGBO red green blue opacity))
+
+(defn argb
+  "Return color with alpha value 'alpha' consisting of
+  'red'' green' and 'blue'."
+  [alpha red blue green]
+  (m/Color.fromARGB alpha red blue green))
+
+
+(defn darken
+  "Darken 'color' by 'n' percent."
+  [color n]
+  (let [lerp-val (/ n 100)]
+    (m/Color.lerp color m/Colors.black lerp-val)))
+
+(defn lighten
+  "Lighten 'color' by 'n' percent."
+  [color n]
+  (let [lerp-val (/ n 100)]
+    (m/Color.lerp color m/Colors.white lerp-val)))
+
+(defn determine-fg-color
+  "Return an appropriate color to be used for the foreground (text)
+  on background-color 'bg-color' based on the cutoff of the keyword
+  :cutoff if provided. also accepts dark and light keywords for the
+  dark and light returned foreground colors respectively
+  otherwise uses black for 'dark' and white for 'light' returns
+  (both with full alpha)."
+  [bg-color & {:keys [cutoff dark light] :or {cutoff 0.33
+                                              dark (m/Color 0xFF0000000)
+                                             light (m/Color 0xFFFFFFFFF) }}]
+  (let [lum (.computeLuminance ^m/Color bg-color)]
+    (if (> lum cutoff)
+      dark light)))
