@@ -1,9 +1,27 @@
 #+title: Flutter Color Viewer (in ClojureDart)
 
-
+* Description
 A simple application to view the basic colors (except transparent) provided by flutter and their corresponding numerical values.
 
-Clicking on a container shows the provided accents and shades of that partaicular color, or the alpha/opacity variants in the case of white or black, Clicking on one of those show a full breakdown of all the its values (red, green, blue, alpha and opacity).
 
+* How to use
+Click on a colored box/container to show the provided accents and shades of that partaicular color, or the alpha/opacity variants in the case of white or black, Clicking on one of those shows a full breakdown of all the colors values (red, green, blue, alpha and opacity).
 
-Written to experiment with ClojueDart and also so I have a way to view the colors without having to scroll endlessly on the flutters web pages.
+* Build instructions
+Needs Clojure Dart and Flutter installed
+
+First from the root folder(containing this README), compile the ClojureDart code to flutter
+
+#+BEGIN_SRC sh
+clj -M:cljd compile
+#+END_SRC
+
+Then build with flutter for appropriate platfom (see flutter build --help)
+.ie for linux
+
+#+BEGIN_SRC shell
+flutter build linux
+#+END_SRC
+
+* Motivation
+Written to experiment with [[https://github.com/Tensegritics/ClojureDart][ClojueDart]] and also so I have a way to view the colors without having to scroll endlessly on the flutters web pages.
