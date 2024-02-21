@@ -8,7 +8,7 @@
    [cljd.flutter :as f])
   (:require
    [colors :as cl]
-   [kjf.dbg :as db :refer [dprn]]
+   ;; [kjf.dbg :as db :refer [dprn]]
    ))
 
 (defn app-bar
