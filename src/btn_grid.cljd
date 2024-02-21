@@ -39,7 +39,7 @@
                           .context ctx
                           .applicationVersion (str "Version " 1.0)
                           .applicationLegalese
-                          (str "© 2023 Kyuvi.\n"
+                          (str "© 2024 Kyuvi.\n"
                                "Released under the GPL 3.0 license.\n"
                                )
                           .children
