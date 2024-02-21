@@ -73,7 +73,7 @@
         c-height (if height height double.maxFinite)
         ]
     (m/Padding
-     .padding (m/EdgeInsets.only .top (if (and max (> c-height 200) ) 20 0))
+     .padding (m/EdgeInsets.symmetric .vertical (if (and max (> c-height 200) ) 20 0))
      .child
      (m/Text (str (color-name-str (name kii) shade accent)
                   (when (and (> c-height 64)
@@ -86,7 +86,7 @@
                          "\nGreen = " green
                          "\nBlue = " blue "\n"
                          "\nAlpha = " alpha "\n"
-                         "Opacity = " opacity  "\n"))
+                         "Opacity = " opacity ))
                   ;; "\n" height " " level
                   )
              .textAlign m/TextAlign.center
@@ -104,16 +104,21 @@
       .appBar (app-bar mode-props
                        (color-name-str (name kii) shade accent-prep))
       .body
-      (f/widget
        (m/LayoutBuilder
         .builder
         (f/build [constr]
                  :let [{:flds [maxHeight]} ^m/BoxConstraints constr]
                  (m/Container
-                  .color color
+                  ;; .color color ;; not needed when decoration is used
                   .margin (m/EdgeInsets.all (cond (> maxHeight 400) 40
                                                   (> maxHeight 220) 20
                                                   :else 10))
+                  .decoration (m/BoxDecoration
+                               .color color
+                               ;; .border (m/Border.all .color (cl/darken color 25)
+                                                     ;; .width (/ maxHeight 200))
+                               .borderRadius (m/BorderRadius.circular (/ maxHeight 20))
+                               )
                   .child (m/Center .child
                                    (m/FittedBox
                                     .child
@@ -123,7 +128,7 @@
                                                  :accent accent-prep }
                                                 {:height maxHeight
                                                  :text-color text-color
-                                                 :level 3} )))))))))))
+                                                 :level 3} ))))))))))
 
 (defn make-color-map
   "Create a color map from a vector of color keywords,
