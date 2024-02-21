@@ -1,0 +1,9 @@
+#+title: Flutter Color Viewer (in ClojureDart)
+
+
+A simple application to view the basic colors (except transparent) provided by flutter and their corresponding numerical values.
+
+Clicking on a container shows the provided accents and shades of that partaicular color, or the alpha/opacity variants in the case of white or black, Clicking on one of those show a full breakdown of all the its values (red, green, blue, alpha and opacity).
+
+
+Written in clojueDart to experiment with theme switching and navigators, also so I have a way to view the colors without having to scroll endlessly on the flutter webpages
