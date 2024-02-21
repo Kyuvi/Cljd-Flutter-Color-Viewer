@@ -27,8 +27,42 @@
                   .icon (m/Icon (if mode-switch
                                   m/Icons.dark_mode_outlined
                                   m/Icons.light_mode_outlined))
-                  .onPressed (fn [] (swap! mode-props not))))]
-               .centerTitle true))))
+                  .onPressed (fn [] (swap! mode-props not))))
+                ;; (m/AboutListTile
+                ;;              .applicationVersion (str "Version " 1)
+                ;;              .applicationLegalese "© 2023 Kyuvi\n"
+                ;;              .child
+                ;;              ;; .icon
+                ;;              ;; (m/Text "About")
+                ;;              (m/Icon m/Icons.info)
+                ;;              .aboutBoxChildren [(m/Text (str "Simple Multiplicaion tables,\n"
+                ;;                                 "and corresponding "
+                ;;                                 "Number Boards"))]
+                ;; )
+                (f/widget
+                 :context ctx
+                 (m/IconButton
+                  .icon (m/Icon m/Icons.info)
+                  .onPressed
+                  (fn [] (m/showAboutDialog
+                          .context ctx
+                          .applicationVersion (str "Version " 1.0)
+                          .applicationLegalese
+                          (str "© 2023 Kyuvi.\n"
+                               "Released under the GPL 3.0 license.\n")
+                          .children
+                          [(m/Text
+                            ;; TODO: add links
+                            (str
+                             "\nView Flutters basic colors and their values.\n"
+                             ;; "View Flutters Basic colors,\n"
+                             ;; "and analyse their values.\n"
+                             "\nWritten using ClojureDart.")
+                            .textAlign m/TextAlign.center
+                            )]
+                          ))))
+                ]
+               .centerTitle true) )))
 
 
 (defn color-name-str
