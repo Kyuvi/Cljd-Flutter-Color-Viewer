@@ -62,7 +62,7 @@
   "Retun a Text object based on the color-props and text-props maps"
   [color-props text-props]
   (let [{:keys [kii color shade accent]} color-props
-        {:keys [height text-color max]} text-props
+        {:keys [height text-color level]} text-props
         {:flds [red green blue alpha opacity value]} ^m/Color color
         c-height (if height height double.maxFinite)
         ]
@@ -70,20 +70,22 @@
      .padding (m/EdgeInsets.only .top (if (and max (> c-height 200) ) 20 0))
      .child
      (m/Text (str (color-name-str (name kii) shade accent)
-                  (when (> c-height 64)
+                  (when (and (> c-height 64)
+                             (or (not (and accent (= level 2)))
+                                 (> c-height 77)))
                     (str  "\n0x" (.toUpperCase (.toRadixString
                                                 value 16))))
-                  (when (or (and max (> c-height 114))  #_(> c-height 200))
+                  (when (or (and (= level 3) (> c-height 114))  #_(> c-height 200))
                     (str "\n\nRed = " red
                          "\nGreen = " green
                          "\nBlue = " blue "\n"
                          "\nAlpha = " alpha "\n"
                          "Opacity = " opacity  "\n"))
-                  ;; "\n" height
+                  ;; "\n" height " " level
                   )
              .textAlign m/TextAlign.center
              .style (m/TextStyle .color text-color
-                                 .fontSize (cond (< c-height 44) 10
+                                 .fontSize (cond (< c-height 50) 10
                                                  (> c-height 208) 32))))))
 
 
@@ -115,7 +117,7 @@
                                                  :accent accent-prep }
                                                 {:height maxHeight
                                                  :text-color text-color
-                                                 :max true} )))))))))))
+                                                 :level 3} )))))))))))
 
 (defn make-color-map
   "Create a color map from a vector of color keywords,
@@ -187,7 +189,8 @@
                              :shade shade
                              :accent accent-prep}
                             {:height maxHeight
-                             :text-color text-color} )))))))))
+                             :text-color text-color
+                             :level level} )))))))))
 
 (defn build-shade-pixels
   "Returns a vector of pixels for shade colors.
