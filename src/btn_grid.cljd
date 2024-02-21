@@ -133,7 +133,7 @@
   ([mode-props kii color level shade accent-prep]
    (f/widget
     :get [m/Navigator]
-    :let [text-color (cl/determine-fg-color color :cutoff 0.32)
+    :let [text-color (cl/determine-fg-color color :use-alpha false :cutoff 0.32)
           tap-fn (case level
                    1 (fn [] (do
                               (push-to-navigator navigator

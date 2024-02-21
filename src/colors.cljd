@@ -131,14 +131,19 @@
 
 (defn determine-fg-color
   "Return an appropriate color to be used for the foreground (text)
-  on background-color 'bg-color' based on the cutoff of the keyword
-  :cutoff if provided. also accepts dark and light keywords for the
-  dark and light returned foreground colors respectively
-  otherwise uses black for 'dark' and white for 'light' returns
-  (both with full alpha)."
-  [bg-color & {:keys [cutoff dark light] :or {cutoff 0.33
-                                              dark (m/Color 0xFF0000000)
-                                             light (m/Color 0xFFFFFFFFF) }}]
-  (let [lum (.computeLuminance ^m/Color bg-color)]
-    (if (> lum cutoff)
-      dark light)))
+  on background-color 'bg-color' based on the cutoff luminance
+  if a value for the keyword :cutoff if provided (defaults to 0.33).
+  Accepts dark and light keywords for the dark and light returned
+  foreground colors respectively otherwise uses black for 'dark'
+  and white for 'light'.
+  Also accepts a :use-alpha keyword which determines if the alpha value of
+  the provided 'bg-color' is used, this defaults to true."
+  [bg-color & {:keys [use-alpha cutoff dark light]
+               :or {use-alpha true cutoff 0.33
+                    dark (color :black) light (color :white)}}]
+  (let [lum (.computeLuminance ^m/Color bg-color)
+        a (.-alpha ^m/Color bg-color)
+        fg-color (if (> lum cutoff) dark light)]
+    (if use-alpha
+      (.withAlpha  ^m/Color fg-color ^int a)
+      fg-color)))
