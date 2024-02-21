@@ -16,7 +16,7 @@
   )
 
 (defn viewer-home
-  "Returns the home page with the live color grid"
+  "Returns the home page with the live basic color grid."
   [mode-props]
   (f/widget
    (m/Scaffold

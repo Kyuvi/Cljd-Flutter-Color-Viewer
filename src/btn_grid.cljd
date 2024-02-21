@@ -13,7 +13,7 @@
 
 (defn app-bar
   "App Bar with a dark mode switch (using mode-props) and also accepts
-  an optional 'name' argument to add under the basic title"
+  an optional 'name' argument to add under the basic title."
   ([mode-props]
    (app-bar mode-props nil))
   ([mode-props name]
@@ -26,7 +26,9 @@
                  (m/IconButton
                   .icon (m/Icon (if mode-switch
                                   m/Icons.dark_mode_outlined
-                                  m/Icons.light_mode_outlined))
+                                  m/Icons.light_mode_outlined
+                                  ;; m/Icons.light_mode
+                                  ))
                   .onPressed (fn [] (swap! mode-props not))))
                 (f/widget
                  :context ctx
@@ -38,13 +40,17 @@
                           .applicationVersion (str "Version " 1.0)
                           .applicationLegalese
                           (str "© 2023 Kyuvi.\n"
-                               "Released under the GPL 3.0 license.\n")
+                               "Released under the GPL 3.0 license.\n"
+                               )
                           .children
                           [(m/Text
-                            ;; TODO: add links
+                            ;; TODO: add links, [selected] rich text?
                             (str
                              "\nView Flutters basic colors and their values.\n"
-                             "\nWritten using ClojureDart.")
+                             ;; "\nWritten by Kyuvi,\n using ClojureDart."
+                             "\nWritten using ClojureDart."
+                               ;; "\nReleased under the GPL 3.0 license."
+                             )
                             .textAlign m/TextAlign.center
                             )]
                           ))))
@@ -59,7 +65,7 @@
   (str name (when accent-prep "-accent") (when shade " ") shade))
 
 (defn color-text
-  "Retun a Text object based on the color-props and text-props maps"
+  "Return a Text object based on the color-props and text-props maps."
   [color-props text-props]
   (let [{:keys [kii color shade accent]} color-props
         {:keys [height text-color level]} text-props
@@ -91,7 +97,7 @@
 
 (defn color-container
   "Return a page of color 'color' accented and shaded if appropriate
-   with its properties written in color text-color"
+   with its properties written in color text-color."
   ([mode-props color-desc-vec]
    (let [[kii color text-color shade accent-prep] color-desc-vec]
      (m/Scaffold
