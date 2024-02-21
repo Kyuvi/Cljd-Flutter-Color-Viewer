@@ -72,7 +72,7 @@
      (m/Text (str (color-name-str (name kii) shade accent)
                   (when (and (> c-height 64)
                              (or (not (and accent (= level 2)))
-                                 (> c-height 77)))
+                                 (> c-height 79)))
                     (str  "\n0x" (.toUpperCase (.toRadixString
                                                 value 16))))
                   (when (or (and (= level 3) (> c-height 114))  #_(> c-height 200))
