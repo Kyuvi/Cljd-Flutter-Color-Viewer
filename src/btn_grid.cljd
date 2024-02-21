@@ -49,11 +49,11 @@
                     (str  "\n0x" (.toUpperCase (.toRadixString
                                                 value 16))))
                   (when (or (and max (> c-height 114))  #_(> c-height 200))
-                    (str "\n\nred = " red
-                         "\ngreen = " green
-                         "\nblue = " blue "\n"
-                         "\nalpha =" alpha "\n"
-                         "opacity = " opacity  "\n"))
+                    (str "\n\nRed = " red
+                         "\nGreen = " green
+                         "\nBlue = " blue "\n"
+                         "\nAlpha = " alpha "\n"
+                         "Opacity = " opacity  "\n"))
                   ;; "\n" height
                   )
              .textAlign m/TextAlign.center
