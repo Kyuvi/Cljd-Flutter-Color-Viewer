@@ -1,6 +1,6 @@
 (ns viewer
-  "An application for finding the basic colors provided by flutter
-   and their hex numbers."
+  "An application for finding the basic colors (except transparent)
+  provided by flutter and their numerical values."
 (:require
    ["package:flutter/material.dart" :as m]
    [cljd.flutter :as f]
