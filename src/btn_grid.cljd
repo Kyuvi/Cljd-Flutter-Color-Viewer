@@ -28,17 +28,6 @@
                                   m/Icons.dark_mode_outlined
                                   m/Icons.light_mode_outlined))
                   .onPressed (fn [] (swap! mode-props not))))
-                ;; (m/AboutListTile
-                ;;              .applicationVersion (str "Version " 1)
-                ;;              .applicationLegalese "© 2023 Kyuvi\n"
-                ;;              .child
-                ;;              ;; .icon
-                ;;              ;; (m/Text "About")
-                ;;              (m/Icon m/Icons.info)
-                ;;              .aboutBoxChildren [(m/Text (str "Simple Multiplicaion tables,\n"
-                ;;                                 "and corresponding "
-                ;;                                 "Number Boards"))]
-                ;; )
                 (f/widget
                  :context ctx
                  (m/IconButton
@@ -55,8 +44,6 @@
                             ;; TODO: add links
                             (str
                              "\nView Flutters basic colors and their values.\n"
-                             ;; "View Flutters Basic colors,\n"
-                             ;; "and analyse their values.\n"
                              "\nWritten using ClojureDart.")
                             .textAlign m/TextAlign.center
                             )]

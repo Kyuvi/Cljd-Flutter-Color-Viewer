@@ -1,5 +1,5 @@
 (ns viewer
-  "An application for finding the basic colors (except transparent)
+  "An application for viewing the basic colors (except transparent)
   provided by flutter and their numerical values."
   {:author "Kyuvi"
    :license {:name "GPL-3.0 WITH Classpath-exception-2.0"
