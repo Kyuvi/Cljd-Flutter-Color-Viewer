@@ -10,9 +10,11 @@ Click on a colored box/container to show the provided accents and shades of that
 * Build instructions
 Needs clojure(>= 1.11), ClojureDart, Dart(>= 3.1) and Flutter(> 3.13) installed.
 
-First from the root folder(containing this README), compile the ClojureDart code to flutter
+First from the root folder(containing this README), initialise and compile the ClojureDart code to flutter from the command line.
 
 #+BEGIN_SRC sh
+clj -M:cljd init
+
 clj -M:cljd compile
 #+END_SRC
 
