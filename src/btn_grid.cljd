@@ -157,7 +157,7 @@
          (#/(m/MaterialPageRoute Object)
             .builder (f/build page))))
 
-;; called from pixel, not needed in clojureDart but "consistency"
+;; called from pixel, not needed in clojureDart but "consistency".
 (declare color-grid)
 
 (defn pixel
