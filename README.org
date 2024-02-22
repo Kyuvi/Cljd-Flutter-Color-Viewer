@@ -16,7 +16,7 @@ Dart(>= 3.1),
 and Flutter(> 3.13).
 
 ** Bulid instructions
-First from the root folder (containing this README), initialize and compile the ClojureDart code to flutter from the command line.
+From the root folder (containing this README), initialize and compile the ClojureDart code to dart from the command line.
 
 #+BEGIN_SRC sh
 clj -M:cljd init
