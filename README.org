@@ -27,7 +27,5 @@ Then build with flutter for appropriate platform (see flutter build --help)
 flutter build linux
 #+END_SRC
 
-
-
 * Motivation
 Written to experiment with [[https://github.com/Tensegritics/ClojureDart][ClojueDart]] and also so I have a way to view the colors without having to scroll endlessly on the flutters web pages.
