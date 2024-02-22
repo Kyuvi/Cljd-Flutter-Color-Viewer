@@ -10,13 +10,13 @@ This app can be found online [[https://kyuvi.codeberg.page/Cljd-Flutter-Color-Vi
 
 * Setup
 ** Dependencies
-clojure(>= 1.11)
-ClojureDart
-Dart(>= 3.1)
-and Flutter(> 3.13)
+clojure(>= 1.11),
+ClojureDart,
+Dart(>= 3.1),
+and Flutter(> 3.13).
 
 ** Bulid instructions
-First from the root folder(containing this README), initialise and compile the ClojureDart code to flutter from the command line.
+First from the root folder (containing this README), initialize and compile the ClojureDart code to flutter from the command line.
 
 #+BEGIN_SRC sh
 clj -M:cljd init
