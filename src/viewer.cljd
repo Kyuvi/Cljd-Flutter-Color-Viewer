@@ -9,7 +9,6 @@
    [cljd.flutter :as f]
    )
   (:require
-   ;; [kjf.kyuthi :as kt]
    [colors :as cl]
    [btn-grid :as gd]
    )
@@ -35,8 +34,6 @@
     (m/MaterialApp
      .title "Flutter Color Viewer"
      .darkTheme (m/ThemeData.dark)
-     ;; .theme kt/kyu-slzd-light-theme
-     ;; .darkTheme kt/kyu-slzd-dark-theme
      .themeMode (if theme-switch m/ThemeMode.light m/ThemeMode.dark)
      .home (viewer-home theme-atom)
      )))
