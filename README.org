@@ -18,7 +18,7 @@ clj -M:cljd init
 clj -M:cljd compile
 #+END_SRC
 
-Then build with flutter for appropriate platfom (see flutter build --help)
+Then build with flutter for appropriate platform (see flutter build --help)
 .ie for linux
 
 #+BEGIN_SRC shell
