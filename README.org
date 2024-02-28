@@ -1,5 +1,5 @@
 #+title: Flutter Color Viewer (in ClojureDart)
-#+OPTIONS: line-break:t
+#+OPTIONS: \n:t
 
 A simple application to view the color constants of flutter (except transparent) and their corresponding numerical values.
 
@@ -11,10 +11,10 @@ This app can be found online [[https://kyuvi.codeberg.page/Cljd-Flutter-Color-Vi
 
 * Setup
 ** Dependencies
-[[https://clojure.org/][Clojure]] (>= 1.11),
-[[https://github.com/Tensegritics/ClojureDart][ClojureDart]],
 Dart (>= 3.1),
-and Flutter (> 3.13).
+Flutter (> 3.13),
+[[https://clojure.org/][Clojure]] (>= 1.11),
+and [[https://github.com/Tensegritics/ClojureDart][ClojureDart]].
 
 ** Bulid instructions
 From the root folder (containing this README), initialize and compile the ClojureDart code to dart from the command line.
