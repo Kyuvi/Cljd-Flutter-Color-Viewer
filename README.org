@@ -1,19 +1,19 @@
 #+title: Flutter Color Viewer (in ClojureDart)
 
-A simple application to view the colors (except transparent) built into flutter and their corresponding numerical values.
+A simple application to view the color constants of flutter (except transparent) and their corresponding numerical values.
 
 
 * Overview
 Click on a colored box/container to show the provided accents and shades of that partaicular color, or the alpha/opacity variants in the case of white or black, Clicking on one of those shows a full breakdown of all the values (red, green, blue, alpha and opacity) of that color.
 
-This app can be found online [[https://kyuvi.codeberg.page/Cljd-Flutter-Color-Viewer/@main/web-build/][here]]
+This app can be found online [[https://kyuvi.codeberg.page/Cljd-Flutter-Color-Viewer/@main/web-build/][here]].
 
 * Setup
 ** Dependencies
-clojure(>= 1.11),
-ClojureDart,
-Dart(>= 3.1),
-and Flutter(> 3.13).
+[[https://clojure.org/][Clojure]] (>= 1.11), \\
+[[https://github.com/Tensegritics/ClojureDart][ClojureDart]], \\
+Dart (>= 3.1), \\
+and Flutter (> 3.13).
 
 ** Bulid instructions
 From the root folder (containing this README), initialize and compile the ClojureDart code to dart from the command line.
@@ -24,12 +24,12 @@ clj -M:cljd init
 clj -M:cljd compile
 #+END_SRC
 
-Then build with flutter for appropriate platform (see flutter build --help)
-.ie for linux
+Then build with flutter for appropriate platform (see =flutter build --help=)
+i.e. for linux
 
 #+BEGIN_SRC shell
 flutter build linux
 #+END_SRC
 
 * Motivation
-Written to experiment with [[https://github.com/Tensegritics/ClojureDart][ClojueDart]] and also so I have a way to view the colors built into flutter easily.
+Written to experiment with [[https://github.com/Tensegritics/ClojureDart][ClojueDart]] and also so I have a way to view the color constants of flutter easily.
