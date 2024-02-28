@@ -11,8 +11,8 @@ This app can be found online [[https://kyuvi.codeberg.page/Cljd-Flutter-Color-Vi
 * Setup
 ** Dependencies
 [[https://clojure.org/][Clojure]] (>= 1.11), \\
-[[https://github.com/Tensegritics/ClojureDart][ClojureDart]], \\
-Dart (>= 3.1), \\
+[[https://github.com/Tensegritics/ClojureDart][ClojureDart]], \\\
+Dart (>= 3.1), \\\
 and Flutter (> 3.13).
 
 ** Bulid instructions
