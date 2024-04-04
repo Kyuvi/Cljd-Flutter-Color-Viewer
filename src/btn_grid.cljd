@@ -79,7 +79,7 @@
      ;; m/Padding
      m/AnimatedPadding
      .padding (m/EdgeInsets.symmetric .vertical padding-val )
-     .duration (Duration .milliseconds 500)
+     .duration (Duration .milliseconds 350)
      .child
      (m/Text (str (color-name-str (name kii) shade accent)
                   (when (and (> c-height 64)
@@ -119,7 +119,7 @@
                                      :else 10)]
                   (m/AnimatedPadding
                   .padding (m/EdgeInsets.all padding)
-                  .duration (Duration .milliseconds 500)
+                  .duration (Duration .milliseconds 350)
                   .child
                   (m/Container
                   ;; .color color ;; not needed when decoration is used
