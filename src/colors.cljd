@@ -85,7 +85,7 @@
                               :red m/Colors.redAccent
                               :teal m/Colors.tealAccent
                               :yellow m/Colors.yellowAccent} kii))
-         shade-map (if accent-color
+         shade-map (if (or accent-color (.contains (name kii) "acc"))
                      {100 #(.-shade100 ^m/MaterialAccentColor %)
                       200 #(.-shade200 ^m/MaterialAccentColor %)
                       400 #(.-shade400 ^m/MaterialAccentColor %)
