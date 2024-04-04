@@ -49,7 +49,7 @@
                           [(m/Text
                             ;; TODO: add links?
                             (str
-                             "\nView Flutters color constants and their values.\n"
+                             "\nView Flutter's color constants and their values.\n"
                              "\nWritten in ClojureDart.")
                             .textAlign m/TextAlign.center)
                            (m/Text "\n\nContact info:")
@@ -80,7 +80,6 @@
      m/AnimatedPadding
      .padding (m/EdgeInsets.symmetric .vertical padding-val )
      .duration (Duration .milliseconds 500)
-     ;; .duration (Duration .seconds 5)
      .child
      (m/Text (str (color-name-str (name kii) shade accent)
                   (when (and (> c-height 64)
