@@ -5,6 +5,7 @@
              :url "https://www.gnu.org/licenses/gpl-3.0.html"}}
   (:require
    ["package:flutter/material.dart" :as m]
+   ["dart:convert" :as cnv]
    [cljd.flutter :as f])
   (:require
    [colors :as cl]
@@ -31,6 +32,8 @@
                   .onPressed (fn [] (swap! mode-props not))))
                 (f/widget
                  :context ctx
+                 :let [m-info (cnv/utf8.decode;; email address
+                               (cnv/base64Decode "a3l1dmlAZ214LmNvbQ=="))]
                  (m/IconButton
                   .icon (m/Icon m/Icons.info)
                   .onPressed
@@ -39,19 +42,25 @@
                           .applicationVersion (str "Version " 1.0)
                           .applicationLegalese
                           (str "© 2024 Kyuvi.\n"
+                               ;; m-info "\n"
                                "Released under the GPL 3.0 license.\n"
                                )
                           .children
                           [(m/Text
-                            ;; TODO: add links, [selected] rich text?
+                            ;; TODO: add links?
                             (str
-                             "\nView Flutters basic colors and their values.\n"
+                             "\nView Flutters color constants and their values.\n"
                              ;; "\nWritten by Kyuvi,\n using ClojureDart."
-                             "\nWritten using ClojureDart."
+                             "\nWritten in ClojureDart."
+                             ;; "\n\nContact Author:"
                                ;; "\nReleased under the GPL 3.0 license."
+                             ;; "\n"
                              )
                             .textAlign m/TextAlign.center
-                            )]
+                            )
+                           (m/Text "\n\nContact info:")
+                          (m/SelectableText m-info)
+                           ]
                           ))))
                 ]
                .centerTitle true) )))
