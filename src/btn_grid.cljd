@@ -32,7 +32,7 @@
                   .onPressed (fn [] (swap! mode-props not))))
                 (f/widget
                  :context ctx
-                 :let [m-info (cnv/utf8.decode;; email address
+                 :let [m-info (cnv/utf8.decode;; mail
                                (cnv/base64Decode "a3l1dmlAZ214LmNvbQ=="))]
                  (m/IconButton
                   .icon (m/Icon m/Icons.info)
@@ -50,20 +50,14 @@
                             ;; TODO: add links?
                             (str
                              "\nView Flutters color constants and their values.\n"
-                             ;; "\nWritten by Kyuvi,\n using ClojureDart."
-                             "\nWritten in ClojureDart."
-                             ;; "\n\nContact Author:"
-                               ;; "\nReleased under the GPL 3.0 license."
-                             ;; "\n"
-                             )
-                            .textAlign m/TextAlign.center
-                            )
+                             "\nWritten in ClojureDart.")
+                            .textAlign m/TextAlign.center)
                            (m/Text "\n\nContact info:")
-                          (m/SelectableText m-info)
+                           (m/SelectableText m-info)
                            ]
                           ))))
                 ]
-               .centerTitle true) )))
+               .centerTitle true))))
 
 
 (defn color-name-str
@@ -130,9 +124,6 @@
                   .child
                   (m/Container
                   ;; .color color ;; not needed when decoration is used
-                  ;; .margin (m/EdgeInsets.all (cond (> maxHeight 400) 40
-                  ;;                                 (> maxHeight 220) 20
-                  ;;                                 :else 10))
                   .decoration (m/BoxDecoration
                                .color color
                                ;; .border (m/Border.all .color (cl/darken color 25)
@@ -148,7 +139,7 @@
                                                  :accent accent-prep }
                                                 {:height maxHeight
                                                  :text-color text-color
-                                                 :level 3} ))))))))))
+                                                 :level 3} )))))))))))
 
 (defn make-color-map
   "Create a color map from a vector of color keywords,
