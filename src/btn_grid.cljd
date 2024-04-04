@@ -70,9 +70,14 @@
         {:keys [height text-color level]} text-props
         {:flds [red green blue alpha opacity value]} ^m/Color color
         c-height (if height height double.maxFinite)
+        padding-val (if (and max (> c-height 200) ) 20 0)
         ]
-    (m/Padding
-     .padding (m/EdgeInsets.symmetric .vertical (if (and max (> c-height 200) ) 20 0))
+     (
+     ;; m/Padding
+     m/AnimatedPadding
+     .padding (m/EdgeInsets.symmetric .vertical padding-val )
+     .duration (Duration .milliseconds 500)
+     ;; .duration (Duration .seconds 5)
      .child
      (m/Text (str (color-name-str (name kii) shade accent)
                   (when (and (> c-height 64)
@@ -106,12 +111,19 @@
        (m/LayoutBuilder
         .builder
         (f/build [constr]
-                 :let [{:flds [maxHeight]} ^m/BoxConstraints constr]
-                 (m/Container
+                 :let [{:flds [maxHeight]} ^m/BoxConstraints constr
+                       padding (cond (> maxHeight 400) 40
+                                     (> maxHeight 220) 20
+                                     :else 10)]
+                  (m/AnimatedPadding
+                  .padding (m/EdgeInsets.all padding)
+                  .duration (Duration .milliseconds 500)
+                  .child
+                  (m/Container
                   ;; .color color ;; not needed when decoration is used
-                  .margin (m/EdgeInsets.all (cond (> maxHeight 400) 40
-                                                  (> maxHeight 220) 20
-                                                  :else 10))
+                  ;; .margin (m/EdgeInsets.all (cond (> maxHeight 400) 40
+                  ;;                                 (> maxHeight 220) 20
+                  ;;                                 :else 10))
                   .decoration (m/BoxDecoration
                                .color color
                                ;; .border (m/Border.all .color (cl/darken color 25)
