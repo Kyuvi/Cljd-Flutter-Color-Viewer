@@ -26,7 +26,7 @@ clj -M:cljd compile
 #+END_SRC
 
 Then build with flutter for appropriate platform (see =flutter build --help=)
-i.e. to build for linux
+i.e. to build for linux,
 
 #+BEGIN_SRC shell
 flutter build linux
