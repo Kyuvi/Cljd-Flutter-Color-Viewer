@@ -53,7 +53,7 @@
                             ;; TODO: add links?
                             (str
                              "\nA simple viewer for Flutter's color constants"
-                             "\nand their values.\n"
+                             " and their values.\n"
                              "\nWritten in ClojureDart.")
                             .textAlign m/TextAlign.center)
                            (m/Text "\n\nContact info:")
