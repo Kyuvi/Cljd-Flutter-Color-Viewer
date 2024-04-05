@@ -11,6 +11,9 @@
    [colors :as cl]
    ))
 
+
+(def version "1.0")
+
 (defn app-bar
   "App Bar with a dark mode switch (using mode-props) and also accepts
   an optional 'name' argument to add under the basic title."
@@ -39,7 +42,7 @@
                   .onPressed
                   (fn [] (m/showAboutDialog
                           .context ctx
-                          .applicationVersion (str "Version " 1.0)
+                          .applicationVersion (str "Version " version)
                           .applicationLegalese
                           (str "© 2024 Kyuvi.\n"
                                ;; m-info "\n"
