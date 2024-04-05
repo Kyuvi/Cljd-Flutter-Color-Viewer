@@ -15,8 +15,8 @@
 (def version "1.0")
 
 (defn app-bar
-  "App Bar with a dark mode switch (using mode-props) and also accepts
-  an optional 'name' argument to add under the basic title."
+  "Returns an App Bar with a dark mode switch (using 'mode-props') and also accepts
+  an optional 'name' argument to add under the main title."
   ([mode-props]
    (app-bar mode-props nil))
   ([mode-props name]
@@ -58,20 +58,18 @@
                             .textAlign m/TextAlign.center)
                            (m/Text "\n\nAuthor's contact info:")
                            (m/SelectableText m-info)
-                           ]
-                          ))))
-                ]
+                           ]))))]
                .centerTitle true))))
 
 
 (defn color-name-str
-  "Return a string containing the full name of the color depending on
-  name (str) shade (int) and accent-prep (bool)."
-  [name shade accent-prep]
-  (str name (when accent-prep "-accent") (when shade " ") shade))
+  "Returns a string containing the full name of the color depending on
+  'name' (str) 'shade' (int) and 'accent-prep' (bool)."
+  [color-name shade accent-prep]
+  (str color-name (when accent-prep "-accent") (when shade " ") shade))
 
 (defn color-text
-  "Return a Text object based on the color-props and text-props maps."
+  "Returns a text object based on the 'color-props' and 'text-props' maps."
   [color-props text-props]
   (let [{:keys [kii color shade accent]} color-props
         {:keys [height text-color level]} text-props
@@ -79,9 +77,7 @@
         c-height (if height height double.maxFinite)
         padding-val (if (and max (> c-height 200) ) 20 0)
         ]
-     (
-     ;; m/Padding
-     m/AnimatedPadding
+    (m/AnimatedPadding
      .padding (m/EdgeInsets.symmetric .vertical padding-val )
      .duration (Duration .milliseconds 350)
      .child
@@ -106,31 +102,33 @@
 
 
 (defn color-container
-  "Return a page of color 'color' accented and shaded if appropriate
-   with its properties written in color text-color."
+  "Returns a page for the color with properties provided in 'color-desc-vec'
+  accented and shaded if appropriate with its name, shade,
+  and if possible its value and value properties
+  printed using the color text-color."
   ([mode-props color-desc-vec]
    (let [[kii color text-color shade accent-prep] color-desc-vec]
      (m/Scaffold
       .appBar (app-bar mode-props
                        (color-name-str (name kii) shade accent-prep))
       .body
-       (m/LayoutBuilder
-        .builder
-        (f/build [constr]
-                 :let [{:flds [maxHeight]} ^m/BoxConstraints constr
-                       padding (cond (> maxHeight 400) 40
-                                     (> maxHeight 220) 20
-                                     :else 10)]
-                  (m/AnimatedPadding
-                  .padding (m/EdgeInsets.all padding)
-                  .duration (Duration .milliseconds 350)
-                  .child
-                  (m/Container
+      (m/LayoutBuilder
+       .builder
+       (f/build [constr]
+                :let [{:flds [maxHeight]} ^m/BoxConstraints constr
+                      padding (cond (> maxHeight 400) 40
+                                    (> maxHeight 220) 20
+                                    :else 10)]
+                (m/AnimatedPadding
+                 .padding (m/EdgeInsets.all padding)
+                 .duration (Duration .milliseconds 350)
+                 .child
+                 (m/Container
                   ;; .color color ;; not needed when decoration is used
                   .decoration (m/BoxDecoration
                                .color color
                                ;; .border (m/Border.all .color (cl/darken color 25)
-                                                     ;; .width (/ maxHeight 200))
+                               ;; .width (/ maxHeight 200))
                                .borderRadius (m/BorderRadius.circular (/ maxHeight 20))
                                )
                   .child (m/Center .child
@@ -145,13 +143,13 @@
                                                  :level 3} )))))))))))
 
 (defn make-color-map
-  "Create a color map from a vector of color keywords,
+  "Creates a color map from a vector of color keywords,
   or a keyword and an accent-preposition.
   [color-vec] returns a map of color keywords to colors.
   [kii accent-prep] returns a map in the form
-  {:color {:shades shade-map} {:accents accent-map}}
-  shade-map and accent maps are number to color maps
-  accent map is only present if accent-prep is true."
+  {:color {:shades shade-map} {:accents accent-map}}.
+  Shade-map and accent maps are maps with number keys to color values.
+  Accent map is only present if accent-prep is true."
   ([color-vec]
    (zipmap color-vec
            (mapv (fn [kii] (cl/color kii)) color-vec)))
@@ -167,21 +165,25 @@
                                                acc-vec))} )]
      {kii (merge shade-map accent-map)} )))
 
-(defn push-to-navigator [nav page]
+(defn push-to-navigator
+  "Push 'page' onto the route stack of navigator 'nav'."
+  [nav page]
   (.push ^m/NavigatorState nav
          (#/(m/MaterialPageRoute Object)
             .builder (f/build page))))
 
-;; called from pixel, not needed in clojureDart but "consistency".
+;; called from pixel, not needed in ClojureDart but here for  "consistency"
+;; with other Clojure dialects.
 (declare color-grid)
 
 (defn pixel
-  "Grid pixel which can be tapped to open up the color to different
-  shades/opacities depending on the keyword (kii) and the level.
-  The color of the pixel is 'color' and it also prints the name of the color
-  with the shade and accent if given."
+  "Returns a Grid pixel which can be tapped to open up the color to different
+  shades/opacities depending on the keyword 'kii' and the 'level'.
+  The color of the pixel is 'color' and it also prints the name
+  (including if it is an accent, as determined by 'accent-prep'), 'shade'
+  and numerical value (if possible) of the pixel's color. "
   ([mode-props kii color level]
-   (pixel mode-props kii color level  nil nil))
+   (pixel mode-props kii color level nil nil))
   ([mode-props kii color level shade accent-prep]
    (f/widget
     :get [m/Navigator]
@@ -220,42 +222,34 @@
 (defn build-pixel-vec
   "Returns a vector of pixels based on the values in map 'm'
   and the current 'level'.
-  If a keyword 'color-kii' is provided, that is used as the base color
-  and the map is assumed to be a map of shades of that color,
-  otherwise the map keys are used as the pixel colors."
+  If a keyword 'color-kii' is provided, that is used as the base color name
+  and the map is assumed to be a map of shades of that color (or its accents),
+  otherwise the map keys are used as the pixel's color name."
   ([mode-props m level]
    (build-pixel-vec mode-props nil m level nil))
   ([mode-props color-kii m level accent-prep]
    (let [map-fn (fn [[kii val]]
-                   (if color-kii
-                     (pixel mode-props color-kii val level kii accent-prep)
-                     (pixel mode-props kii val level)))]
+                  (if color-kii
+                    (pixel mode-props color-kii val level kii accent-prep)
+                    (pixel mode-props kii val level)))]
      (mapv map-fn
-        (sort-by (fn [[kii val]] (.computeLuminance ^m/Color val)) m)))))
+           (sort-by (fn [[kii val]] (.computeLuminance ^m/Color val)) m)))))
 
 
 (defn build-shade-pixels
-  "Returns a vector of pixels for shade colors.
-  m should be a map of the form
+  "Returns a vector of pixels for the shades of a color given in the map
+  'm' at level 'level'.
+  The map 'm' should be a map of the form
   {:color {:shades shade-map} {:accents accent-map}}
-  with a the accents-map being optional."
+  with the map {:accents accents-map} being optional."
   [mode-props m level]
   (let [color-kii (first (keys m))
         shade-map (get-in m [color-kii :shades])
         accent-map (get-in m [color-kii :accents])
-        shade-vec ;; (mapv (fn [[shade val]]
-                  ;;         (pixel mode-props kii val level shade nil))
-                  ;;       (sort-by (fn [[shade val]]
-                  ;;                  (.computeLuminance ^m/Color val)) shade-map))
-                  (build-pixel-vec mode-props color-kii shade-map level nil )
+        shade-vec (build-pixel-vec mode-props color-kii shade-map level nil)
         accent-vec (when accent-map
-                     ;; (mapv (fn [[shade val]]
-                     ;;         (pixel mode-props kii val level shade true))
-                     ;;       (sort-by (fn [[shade val]]
-                     ;;                  (.computeLuminance ^m/Color val))
-                     ;;                accent-map))
-                  (build-pixel-vec mode-props color-kii accent-map level true )
-                     )
+                     (build-pixel-vec
+                      mode-props color-kii accent-map level true))
         filler-px (m/Container)
         filler-vec (vec (repeat 2 filler-px))]
 
@@ -263,25 +257,18 @@
 
 
 (defn build-pixels
-  "Returns the grid pixel based on the number of key-val pairs in the map 'm'."
+  "Returns the grid pixels based on the number of key-val pairs in the map 'm'."
   [mode-props m level]
   (let [map-count (count m)
         filler-px (m/Container)
-        simple-build-fn (fn [mp]
-                          ;; (mapv
-                          ;;  (fn [[kii val]] (pixel mode-props kii val level))
-                          ;;  (sort-by
-                          ;;   (fn [[kii val]]
-                          ;;     (.computeLuminance ^m/Color val)) mp))
-                          (build-pixel-vec mode-props m level)
-                          )]
+        simple-build-fn (fn [mp] (build-pixel-vec mode-props m level))]
     (if (> map-count 1)
       (simple-build-fn m)
       (build-shade-pixels mode-props m level))))
 
 
 (defn color-grid
-  "Return a Page with a grid and an app-bar with a theme-switch for the color
+  "Returns a Page with a grid and an app-bar with a theme-switch for the color
   represented by kii."
   [mode-props kii]
   (m/Scaffold
@@ -299,7 +286,8 @@
                                               (into black-vec [kii]))]
                                    :white [3 (make-color-map
                                               (into white-vec [kii]))]
-                                   (:brown :grey :blue-grey) [4 (make-color-map kii nil)]
+                                   (:brown :grey :blue-grey) [4 (make-color-map
+                                                                 kii nil)]
                                    [4 (make-color-map kii true)])
           children (build-pixels mode-props color-map 2)]
     (m/Center
