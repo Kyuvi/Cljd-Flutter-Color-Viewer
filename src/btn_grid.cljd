@@ -56,7 +56,7 @@
                              " and their values.\n"
                              "\nWritten in ClojureDart.")
                             .textAlign m/TextAlign.center)
-                           (m/Text "\n\nAuthor's Contact info:")
+                           (m/Text "\n\nAuthor's contact info:")
                            (m/SelectableText m-info)
                            ]
                           ))))
