@@ -10,9 +10,7 @@
    )
   (:require
    [colors :as cl]
-   [btn-grid :as gd]
-   )
-  )
+   [btn-grid :as gd]))
 
 (defn viewer-home
   "Returns the home page with the live basic color grid."
@@ -35,5 +33,4 @@
      .title "Flutter Color Viewer"
      .darkTheme (m/ThemeData.dark)
      .themeMode (if theme-switch m/ThemeMode.light m/ThemeMode.dark)
-     .home (viewer-home theme-atom)
-     )))
+     .home (viewer-home theme-atom))))

@@ -8,8 +8,7 @@
    ["dart:convert" :as cnv]
    [cljd.flutter :as f])
   (:require
-   [colors :as cl]
-   ))
+   [colors :as cl]))
 
 
 (def version "1.0")

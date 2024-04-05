@@ -5,17 +5,16 @@
              :url "https://www.gnu.org/licenses/gpl-3.0.html"}}
   (:require
    ["package:flutter/material.dart" :as m]
-   [cljd.flutter :as f]
-   )
-  )
+   [cljd.flutter :as f]))
 
 (defn color
   "([val] [k acc-shade] [k accent-prep shade])
-  Function to lispify dart colors,
-  [val] - return color if possible, val can be a number or keyword representing
+  Function to lispify dart colors making it easier to pass colors as numbers or
+  keywords (or keywords with shades and an accent preposition if so inclined).
+  [val] - Returns color if possible, val can be a number or keyword representing
   a color.
-  [color-keyword acc-shade] - If acc-shade is a number, return color with shade,
-   otherwise return color with accent.
+  [color-keyword acc-shade] - If acc-shade is a number, returns a color with shade,
+   otherwise returns a color with accent.
   [color-keyword accent-prep shade] - Return accented color with
   corresponding shade if possible.
   NOTE: as long as a similar color exists, this will not produce an error but
@@ -109,31 +108,31 @@
        main-color))))
 
 (defn rgbo
-  "Return color consiting of 'red' 'green' 'blue' with 'opacity'."
+  "Returns color consiting of 'red' 'green' 'blue' with 'opacity'."
   [red green blue opacity]
   (m/Color.fromRGBO red green blue opacity))
 
 (defn argb
-  "Return color with alpha value 'alpha' consisting of
+  "Returns color with alpha value 'alpha' consisting of
   'red'' green' and 'blue'."
   [alpha red blue green]
   (m/Color.fromARGB alpha red blue green))
 
 
 (defn darken
-  "Darken color 'clr' by 'n' percent."
+  "Returns a darkened color based on lerping 'clr' with black by 'n' percent."
   [clr n]
   (let [lerp-val (/ n 100)]
     (m/Color.lerp clr m/Colors.black lerp-val)))
 
 (defn lighten
-  "Lighten color 'clr' by 'n' percent."
+  "Returns a lightened color based on lerping 'clr' with white by 'n' percent."
   [clr n]
   (let [lerp-val (/ n 100)]
     (m/Color.lerp clr m/Colors.white lerp-val)))
 
 (defn determine-fg-color
-  "Return an appropriate color to be used for the foreground (text)
+  "Returns an appropriate color to be used for the foreground (text)
   on background-color 'bg-color' based on the cutoff luminance
   if a value for the keyword :cutoff if provided (defaults to 0.33).
   Accepts dark and light keywords for the dark and light returned
