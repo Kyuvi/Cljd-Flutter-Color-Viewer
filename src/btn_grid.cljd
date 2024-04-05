@@ -217,25 +217,45 @@
                              :text-color text-color
                              :level level} )))))))))
 
+(defn build-pixel-vec
+  "Returns a vector of pixels based on the values in map 'm'
+  and the current 'level'.
+  If a keyword 'color-kii' is provided, that is used as the base color
+  and the map is assumed to be a map of shades of that color,
+  otherwise the map keys are used as the pixel colors."
+  ([mode-props m level]
+   (build-pixel-vec mode-props nil m level nil))
+  ([mode-props color-kii m level accent-prep]
+   (let [map-fn (fn [[kii val]]
+                   (if color-kii
+                     (pixel mode-props color-kii val level kii accent-prep)
+                     (pixel mode-props kii val level)))]
+     (mapv map-fn
+        (sort-by (fn [[kii val]] (.computeLuminance ^m/Color val)) m)))))
+
+
 (defn build-shade-pixels
   "Returns a vector of pixels for shade colors.
   m should be a map of the form
   {:color {:shades shade-map} {:accents accent-map}}
   with a the accents-map being optional."
   [mode-props m level]
-  (let [kii (first (keys m))
-        shade-map (get-in m [kii :shades])
-        accent-map (get-in m [kii :accents])
-        shade-vec (mapv (fn [[shade val]]
-                          (pixel mode-props kii val level shade nil))
-                        (sort-by (fn [[shade val]]
-                                   (.computeLuminance ^m/Color val)) shade-map))
+  (let [color-kii (first (keys m))
+        shade-map (get-in m [color-kii :shades])
+        accent-map (get-in m [color-kii :accents])
+        shade-vec ;; (mapv (fn [[shade val]]
+                  ;;         (pixel mode-props kii val level shade nil))
+                  ;;       (sort-by (fn [[shade val]]
+                  ;;                  (.computeLuminance ^m/Color val)) shade-map))
+                  (build-pixel-vec mode-props color-kii shade-map level nil )
         accent-vec (when accent-map
-                     (mapv (fn [[shade val]]
-                             (pixel mode-props kii val level shade true))
-                           (sort-by (fn [[shade val]]
-                                      (.computeLuminance ^m/Color val))
-                                    accent-map)))
+                     ;; (mapv (fn [[shade val]]
+                     ;;         (pixel mode-props kii val level shade true))
+                     ;;       (sort-by (fn [[shade val]]
+                     ;;                  (.computeLuminance ^m/Color val))
+                     ;;                accent-map))
+                  (build-pixel-vec mode-props color-kii accent-map level true )
+                     )
         filler-px (m/Container)
         filler-vec (vec (repeat 2 filler-px))]
 
@@ -248,11 +268,13 @@
   (let [map-count (count m)
         filler-px (m/Container)
         simple-build-fn (fn [mp]
-                          (mapv
-                           (fn [[kii val]] (pixel mode-props kii val level))
-                           (sort-by
-                            (fn [[kii val]]
-                              (.computeLuminance ^m/Color val)) mp)))]
+                          ;; (mapv
+                          ;;  (fn [[kii val]] (pixel mode-props kii val level))
+                          ;;  (sort-by
+                          ;;   (fn [[kii val]]
+                          ;;     (.computeLuminance ^m/Color val)) mp))
+                          (build-pixel-vec mode-props m level)
+                          )]
     (if (> map-count 1)
       (simple-build-fn m)
       (build-shade-pixels mode-props m level))))
