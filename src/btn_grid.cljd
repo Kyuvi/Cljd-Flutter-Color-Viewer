@@ -35,8 +35,8 @@
                   .onPressed (fn [] (swap! mode-props not))))
                 (f/widget
                  :context ctx
-                 :let [m-info (cnv/utf8.decode;; mail
-                               (cnv/base64Decode "a3l1dmlAZ214LmNvbQ=="))]
+                 :let [m-info (cnv/utf8.decode
+                               (cnv/base64Decode "S3l1dmlAZ214LmNvbQ=="))]
                  (m/IconButton
                   .icon (m/Icon m/Icons.info)
                   .onPressed
