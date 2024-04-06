@@ -252,7 +252,7 @@
         filler-px (m/Container)
         filler-vec (vec (repeat 2 filler-px))]
 
-    (vec (concat shade-vec filler-vec accent-vec))))
+    (into shade-vec (concat filler-vec accent-vec))))
 
 
 (defn build-pixels
