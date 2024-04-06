@@ -10,7 +10,7 @@
 (defn color
   "([val] [k acc-shade] [k accent-prep shade])
   Function to lispify dart colors, making it easier to pass colors as numbers or
-  a (color-name) keyword (or a keyword with an accent preposition  and/or a shade
+  a (color-name) keyword (or a keyword with an accent preposition and/or a shade
   if so inclined).
   [val] - Returns color if possible, val can be a number or keyword representing
   a color.
@@ -149,5 +149,5 @@
         a (.-alpha ^m/Color bg-color)
         fg-color (if (> lum cutoff) dark light)]
     (if use-alpha
-      (.withAlpha  ^m/Color fg-color ^int a)
+      (.withAlpha ^m/Color fg-color ^int a)
       fg-color)))

@@ -84,9 +84,9 @@
                   (when (and (> c-height 64)
                              (or (not (and accent (= level 2)))
                                  (> c-height 79)))
-                    (str  "\n0x" (.toUpperCase (.toRadixString
+                    (str "\n0x" (.toUpperCase (.toRadixString
                                                 value 16))))
-                  (when (or (and (= level 3) (> c-height 114))  #_(> c-height 200))
+                  (when (or (and (= level 3) (> c-height 114)) #_(> c-height 200))
                     (str "\n\nRed = " red
                          "\nGreen = " green
                          "\nBlue = " blue "\n"
@@ -101,9 +101,8 @@
 
 
 (defn color-container
-  "Returns a page for the color with properties provided in 'color-desc-vec'
-  accented and shaded if appropriate with its name, shade,
-  and if possible its value and value properties
+  "Returns a page for the color whose properties are provided in 'color-desc-vec'
+  with its name, shade, and if there is enough space, its value and value properties
   printed using the color text-color."
   ([mode-props color-desc-vec]
    (let [[kii color text-color shade accent-prep] color-desc-vec]
@@ -171,7 +170,7 @@
          (#/(m/MaterialPageRoute Object)
             .builder (f/build page))))
 
-;; called from pixel, not needed in ClojureDart but here for  "consistency"
+;; called from pixel, not needed in ClojureDart but here for "consistency"
 ;; with other Clojure dialects.
 (declare color-grid)
 
@@ -180,7 +179,7 @@
   shades/opacities depending on the keyword 'kii' and the 'level'.
   The color of the pixel is 'color' and it also prints the name
   (including if it is an accent, as determined by 'accent-prep'), 'shade'
-  and numerical value (if possible) of the pixel's color. "
+  and, if there is enough space, the numerical value of the pixel's color."
   ([mode-props kii color level]
    (pixel mode-props kii color level nil nil))
   ([mode-props kii color level shade accent-prep]
@@ -276,8 +275,8 @@
    .body
    (f/widget
     :let [black-vec [:black12 :black26 :black38 :black45 :black54 :black87]
-          white-vec [:white10 :white12 :white24  :white30 :white38  :white54
-                     :white60  :white70]
+          white-vec [:white10 :white12 :white24 :white30 :white38 :white54
+                     :white60 :white70]
           shade-vec (into [50] (range 100 1000 100))
           acc-vec (vec (range 100 500 100))
           [axis-count color-map] (case kii
