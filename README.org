@@ -6,8 +6,6 @@ The main repository is on [[https://codeberg.org/Kyuvi/Cljd-Flutter-Color-Viewer
 * Description
 A simple application to view the color constants of flutter (except transparent) and their corresponding numerical values.
 
-
-
 * Overview
 Click on a colored box/container to show the provided accents and shades of that partaicular color, or the alpha/opacity variants in the case of white or black, Clicking on one of those shows a full breakdown of all the values (red, green, blue, alpha and opacity) of that color.
 
