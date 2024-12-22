@@ -15,21 +15,23 @@
 (def theme-colors
   (let [nord0 (cl/rgbo 0x2E 0x34 0x40 1 )
         nord1 (cl/rgbo  0x3B 0x42 0x52 1)
-        dark-brown (cl/rgbo 22 17 17 1 )
+        ;; dark-brown (cl/rgbo 22 17 17 1 )
+        dm-brown (cl/rgbo 40 44 52 1 )
         sol-base0 (cl/rgbo 0 43 54 1)
-        ]
-    {:app-bar [m/Colors.blue.shade700
+        solish (cl/rgbo 0 31 32 1)]
+    {:app-bar [(cl/color :blue 700 )
                ;; nord1
-               dark-brown
+               dm-brown
                ;; nil
              ;; m/Colors.blueGrey.shade900
                ]
-     :sc-bk [m/Colors.grey.shade300
+     :sc-bk [(cl/color :grey 300)
              ;; nord0
-             m/Colors.blueGrey.shade900
-             ;; sol-base0
+              ;; (cl/color :blue-grey 900)
+             ;; solish
+             sol-base0
              ]
-     :dlg-bk [m/Colors.blueGrey.shade200 m/Colors.blueGrey.shade800]}))
+     :dlg-bk [(cl/color :blue-grey 200) (cl/color :blue-grey 800)]}))
 
 (defn viewer-home
   "Returns the home page with the live basic color grid."
