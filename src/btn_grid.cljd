@@ -13,6 +13,13 @@
 
 (def version "1.0")
 
+(def kyuvi-crypto-map
+  {:monero (str "42s4DCgjk2sguR8x1H4Svx7sBuysvrRHGCK3pfQTcEerNBUG"
+                "hT43gMy6noctiGeVeo61aFzsQfGwVTxNmruy3dqb8PAyYZM")
+   :bitcoin  "bc1quymsg5tvyvqkcn35zzujfdrdwgxnakqaptqc5k"
+   :litecoin  "ltc1q8ese8e8rl9c80emqgvek24gylz32u3d76v2e9q"
+   })
+
 (defn app-bar
   "Returns an App Bar with a dark mode switch (using 'mode-props') and also accepts
   an optional 'name' argument to add under the main title."
@@ -57,6 +64,15 @@
                             .textAlign m/TextAlign.center)
                            (m/Text "\n\nAuthor's contact info:")
                            (m/SelectableText m-info)
+                           (m/ExpansionTile
+                            .title (m/Text "Donations" .textAlign m/TextAlign.center)
+                            .children [(m/Text "Monero")
+                                       (m/SelectableText (:monero kyuvi-crypto-map))
+                                       (m/Text "\nBitcoin")
+                                       (m/SelectableText (:bitcoin kyuvi-crypto-map))
+                                       (m/Text "\nLiteCoin")
+                                       (m/SelectableText (:litecoin kyuvi-crypto-map))
+                                       ])
                            ]))))]
                .centerTitle true))))
 
