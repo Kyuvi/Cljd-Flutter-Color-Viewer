@@ -12,6 +12,25 @@
    [colors :as cl]
    [btn-grid :as gd]))
 
+(def theme-colors
+  (let [nord0 (cl/rgbo 0x2E 0x34 0x40 1 )
+        nord1 (cl/rgbo  0x3B 0x42 0x52 1)
+        dark-brown (cl/rgbo 22 17 17 1 )
+        sol-base0 (cl/rgbo 0 43 54 1)
+        ]
+    {:app-bar [m/Colors.blue.shade700
+               ;; nord1
+               dark-brown
+               ;; nil
+             ;; m/Colors.blueGrey.shade900
+               ]
+     :sc-bk [m/Colors.grey.shade300
+             ;; nord0
+             m/Colors.blueGrey.shade900
+             ;; sol-base0
+             ]
+     :dlg-bk [m/Colors.blueGrey.shade200 m/Colors.blueGrey.shade800]}))
+
 (defn viewer-home
   "Returns the home page with the live basic color grid."
   [mode-props]
@@ -26,11 +45,23 @@
                               .child (gd/btn-grid mode-props)))
               ]))))
 
+(defn fcv-theme [kii]
+  (let [seln (case kii :light 0 :dark 1)
+        base ([(m/ThemeData.light) (m/ThemeData.dark)] seln)
+        abt (m/AppBarTheme
+             .backgroundColor ((:app-bar theme-colors) seln))]
+    (f/widget (.copyWith ^m/ThemeData base
+                         .appBarTheme abt
+                         .dialogBackgroundColor ((:dlg-bk theme-colors) seln)
+                         .scaffoldBackgroundColor ((:sc-bk theme-colors) seln )
+                         ))))
+
 (defn main []
   (f/run
     :watch [theme-switch (atom false) :as theme-atom]
     (m/MaterialApp
      .title "Flutter Color Viewer"
-     .darkTheme (m/ThemeData.dark)
+     .theme (fcv-theme :light)
+     .darkTheme (fcv-theme :dark)
      .themeMode (if theme-switch m/ThemeMode.light m/ThemeMode.dark)
      .home (viewer-home theme-atom))))
